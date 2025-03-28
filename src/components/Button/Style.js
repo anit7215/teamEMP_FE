@@ -3,7 +3,12 @@ import styled from "styled-components";
 export const Container = styled.div`
     display: flex;
     font-family:'Pretendard-SemiBold';
-    background-color:#33536D;
+    background: linear-gradient(
+        100deg,
+        rgba(115, 179, 223, 0.95) -49.53%,
+        rgba(97, 160, 212, 0.95) 24.57%,
+        rgba(118, 217, 228, 0.95) 129.21%
+    );
     color: #ffffff;
     border-radius: 15px; 
     width: 100%; 
