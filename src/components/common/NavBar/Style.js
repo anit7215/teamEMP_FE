@@ -32,5 +32,5 @@ export const Button = styled(Link)`
 export const StyledIcon = styled.img`
    width: ${(props) => (props.$isHome ? "56px" : "32px")};
   height: ${(props) => (props.$isHome ? "56px" : "32px")};
-  margin-bottom: 4px;
+  margin-bottom: ${(props) => (props.$isHome ? "0px" : "5px")};
 `;

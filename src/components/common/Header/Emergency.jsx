@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Icon } from './Style';
+import { Icon, EmergencyIconWrapper } from './Style';
 import EmergencyIcon from '../../../assets/icons/EmergencyIcon.svg';
 
 const Emergency= () => {
@@ -8,7 +8,11 @@ const Emergency= () => {
     const handleClick = () => {
         navigate("/emergency");
     };
-    return <Icon src={EmergencyIcon} alt="응급실 페이지 가기" onClick={handleClick} />;
+    return (
+    <EmergencyIconWrapper onClick={handleClick}>
+        <Icon src={EmergencyIcon} alt="응급실 페이지 가기"/>
+    </EmergencyIconWrapper>
+    );
 };
 
 export default Emergency;

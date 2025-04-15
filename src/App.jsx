@@ -7,33 +7,23 @@ import ProfileSettingPage from './pages/ProfileSetting/ProfileSettingPage';
 import HomePage from './pages/Home/HomePage';
 import MyPage from './pages/MyPage/MyPage';
 import FamilyPage from './pages/Family/FamilyPage';
-import CalandarPage from './pages/Calandar/CalandarPage';
+import CalendarPage from './pages/Calendar/CalendarPage';
 import CommunityPage from './pages/Community/CommunityPage';
 import EmergencyPage from './pages/Emergency/EmergencyPage';
 import ReservationPage from './pages/Reservation/ReservationPage';
 import StatisticsPage from './pages/Statistics/StatisticsPage';
 import NotificationPage from './pages/Notification/NotificationPage';
 import MainLayout from './layout/MainLayout';
-
+import LoginLayout from './layout/LoginLayout';
 const router = createBrowserRouter([
   {
-      path: '/',
+    path: '/',
+    element: <LoginMainPage />
+  },
+  {
       element: <MainLayout/>,
       // errorElement: <NotFound/>,
-
       children: [
-          {
-              index: true,
-              element: <LoginMainPage/>
-          },
-          {
-              path: 'login',
-              element: <LoginPage/>
-          },
-          {
-            path:'profileSetting',
-            element:<ProfileSettingPage/>,
-          },
           {
             path:'home',
             element:<HomePage/>,
@@ -55,20 +45,33 @@ const router = createBrowserRouter([
             element:<MyPage/>,
           },
           {
-            path:'emergency',
-            element:<EmergencyPage/>,
-          },
-          {
             path:'statistics',
             element:<StatisticsPage/>,
           },
           {
             path:'calendar',
-            element:<CalandarPage/>,
+            element:<CalendarPage/>,
           },
           {
             path:'notification',
             element:<NotificationPage/>,
+          },
+      ]
+  },
+  {
+      element: <LoginLayout/>,
+      children: [
+          {
+            path: 'login',
+            element: <LoginPage/>
+          },
+          {
+            path:'profileSetting',
+            element:<ProfileSettingPage/>,
+          },
+          {
+            path:'emergency',
+            element:<EmergencyPage/>,
           },
       ]
   },

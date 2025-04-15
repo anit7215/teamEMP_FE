@@ -13,9 +13,9 @@ const Alarm = () => {
     };
 
     return (
-        <S.Container onClick={handleAlarmClick}>
-            <S.Icon src={alarm ? hasAlarm : hasAlarm} alt="Alarm" />
-        </S.Container>
+        <S.AlarmIconWrapper onClick={handleAlarmClick}>
+            <S.AlarmIcon src={alarm ? hasAlarm : noAlarm} alt="Alarm" />
+        </S.AlarmIconWrapper>
     );
 
 };
