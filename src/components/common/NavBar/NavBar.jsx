@@ -14,7 +14,7 @@ import * as S from './Style';
 
 const NavButton = ({ to, Icon, label, active, isHome = false  }) => {
   return (
-    <S.Button to={to} $active={active ? "true" : "fals"}>
+    <S.Button to={to} $active={active ? "true" : "false"}>
       <S.StyledIcon src={Icon} alt={label} $isHome={isHome}/>
       {label}
     </S.Button>

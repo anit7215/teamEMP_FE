@@ -27,6 +27,7 @@ export const Button = styled(Link)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: all 0.1s ease;
 `;
 
 export const StyledIcon = styled.img`

@@ -2,7 +2,7 @@ import React from 'react';
 import * as S from './Style';
 import { useNavigate } from 'react-router-dom';
 
-const Button = ({ text, to, disabled=false }) => {
+const Button = ({ text, to, disabled = false }) => {
     const navigate = useNavigate();
     const handleClick = () => {
         if (!disabled && to) {

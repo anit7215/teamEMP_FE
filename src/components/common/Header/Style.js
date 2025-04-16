@@ -9,6 +9,7 @@ export const Container = styled.div`
 export const Logo = styled.img`
     width:104px;
     height:38px;
+    cursor: pointer;
 `;
 export const Icon  = styled.img`
     width:28px;
