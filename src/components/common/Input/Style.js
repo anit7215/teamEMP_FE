@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const InputContainer = styled.input`
-    display: flex;
-    // height: 30px;
+    width: 100%;
+    box-sizing: border-box;
     padding: 8px;
     align-items: center;
     gap: 10px;
