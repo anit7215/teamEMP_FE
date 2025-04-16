@@ -1,8 +1,8 @@
 import React from 'react';
 import * as S from './Style';
-import Button  from '../../components/Button/Button';
-
-const LoginPage = () => {
+import Button  from '../../components/common/Button/Button';
+import Header from '../../components/common/Header/Header';
+const Login = () => {
     return (
         <S.Container>
             <S.Title>
@@ -15,4 +15,4 @@ const LoginPage = () => {
         
     );
 };
-export default LoginPage;
+export default Login;
