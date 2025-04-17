@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 0px 8.5px 0px 8.5px;
 `;
 
 export const Title = styled.div`
@@ -16,10 +17,8 @@ export const Title = styled.div`
 
 export const Content = styled.div`
   color: #686b73;
-  font-family: Pretendard;
+  font-family: "Pretendard-Regular";
   font-size: 11px;
-  font-style: normal;
-  font-weight: 400;
   line-height: 14px;
   margin-top: 4px;
   margin-bottom: 16px;
@@ -27,10 +26,8 @@ export const Content = styled.div`
 
 export const AddText = styled.div`
   color: #767b89;
-  font-family: Pretendard;
-  font-size: 8px;
-  font-style: normal;
-  font-weight: 600;
+  font-family:"Pretendard-Semibold";
+  font-size: 10px;
   line-height: normal;
 `;
 
@@ -48,7 +45,7 @@ export const NameWrapper = styled.div`
 export const Name = styled.div`
   display: flex;
   align-items: flex-end;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   gap: 6px;
 `;
 
@@ -109,3 +106,13 @@ export const GenderButton = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
 `;
+export const BirthWrapper = styled.div`
+  margin-bottom:16px;
+  padding: 0px 65px 0px 65px;
+`;
+
+export const AddressWrapper = styled.div`
+  margin-bottom:35px;
+  padding: 8px 16px 0px 16px;
+`;
+
