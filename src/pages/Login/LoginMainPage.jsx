@@ -1,5 +1,5 @@
 import React from "react";
-import logo from '../../assets/icons/logo.svg';
+import logo from '../../assets/icons/Logo.svg';
 import kakao from "../../assets/icons/Kakao.svg";
 import naver from "../../assets/icons/Naver.svg";  
 import google from "../../assets/icons/Google.svg";
@@ -29,6 +29,7 @@ const Button = styled.button`
   font-family: "Pretendard-Medium";
   font-size:14px;
   width: 100%;
+  height:40px;
   padding: 0px 12px;
   margin-top: 8px;
   border: none;
@@ -39,6 +40,10 @@ const Button = styled.button`
   cursor: pointer;
   background-color: ${(props) => props.$bgColor || "#fff"};
   color: ${(props) => props.$textColor || "#333"};
+
+   &:hover {
+    filter: brightness(0.96); 
+  }
 `;
 
 const ButtonImage = styled.img`
@@ -50,6 +55,17 @@ const ButtonContainer = styled.div`
   width: 100%;
 `;
 
+const Text = styled.div`
+  text-align:center;
+  align-items:center;
+  margin: 16px auto 0 auto;  
+  font-size:12px;
+  color:#474A52;
+  border-bottom:1px solid #474A52;
+  width:fit-content;
+  cursor:pointer;
+`;
+
 const LoginMain = () => {
   const navigate = useNavigate();
   return (
@@ -59,12 +75,16 @@ const LoginMain = () => {
           <Button $bgColor="#FDDC3F" $textColor="#3A2929" onClick={()=>{navigate("/login")}}>
             <ButtonImage src={kakao} alt="Kakao" /> 카카오 로그인
           </Button>
-          <Button $bgColor="#03C75A" $textColor="#ffffff">
+          <Button $bgColor="#03C75A" $textColor="#ffffff" onClick={()=>{navigate("/login")}}>
             <ButtonImage src={naver} alt="Naver" /> 네이버 로그인
           </Button>
-          <Button style={{ border: "1px solid #747775"}}>
+          <Button style={{ border: "1px solid #747775"}} onClick={()=>{navigate("/login")}}>
             <ButtonImage src={google} alt="Google"/> 구글 로그인
           </Button>
+          <Button style={{ border: "1px solid #747775"}} onClick={()=>{navigate("/login")}}>
+             이메일 로그인
+          </Button>
+          <Text  onClick={()=>{navigate("/signup")}}>회원가입</Text>
         </ButtonContainer>
         
     </Container>

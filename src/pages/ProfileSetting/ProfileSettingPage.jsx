@@ -3,7 +3,7 @@ import Card from "../../components/common/Card/Card";
 import Button from "../../components/common/Button/Button";
 import Input from "../../components/common/Input/Input";
 import * as S from "./Style";
-import BirthDateSelector from "../../components/Dropdown/BirthdaySelect";
+import DateSelect from "../../components/Dropdown/DateSelect";
 import AddressSelect from "../../components/Dropdown/AddressSelect";
 // import Modal from "../../components/Modal/Modal";
 
@@ -46,7 +46,12 @@ const ProfileSettingPage = () => {
             <Input
               placeholder={"이름을 입력하세요"}
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= 10) {
+                  setName(value);
+                }
+              }}
             />
           </S.NameWrapper>
 
@@ -71,7 +76,7 @@ const ProfileSettingPage = () => {
 
         <S.Title>생년월일</S.Title>
         <S.BirthWrapper>
-          <BirthDateSelector
+          <DateSelect
             year={birth.year}
             month={birth.month}
             day={birth.day}

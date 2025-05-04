@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Dropdown from "./Dropdown"; 
 
-const BirthDateSelector = ({ onChange }) => {
+const DateSelect = ({ onChange }) => {
   const years = Array.from({ length: 100 }, (_, i) => (2025 - i).toString());
   const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, "0"));
   const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString().padStart(2, "0"));
@@ -57,4 +57,4 @@ const BirthDateSelector = ({ onChange }) => {
   );
 };
 
-export default BirthDateSelector;
+export default DateSelect;

@@ -13,6 +13,7 @@ import EmergencyPage from './pages/Emergency/EmergencyPage';
 import ReservationPage from './pages/Reservation/ReservationPage';
 import StatisticsPage from './pages/Statistics/StatisticsPage';
 import NotificationPage from './pages/Notification/NotificationPage';
+import SignUpPage from './pages/SignUp/SignUpPage';
 import MainLayout from './layout/MainLayout';
 import LoginLayout from './layout/LoginLayout';
 const router = createBrowserRouter([
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
           {
             path: 'login',
             element: <LoginPage/>
+          },
+          {
+            path: "signup",
+            element: <SignUpPage/>
           },
           {
             path:'profileSetting',

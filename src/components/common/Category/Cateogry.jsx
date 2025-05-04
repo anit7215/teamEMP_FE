@@ -1,30 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CategoryContainer, Button } from './Style';
 
-const Category = ({ leftText, rightText, onTabClick, selectedTab }) => {
-    const [internalTab, setInternalTab] = useState(0);
-    const isControlled = selectedTab !== undefined && onTabClick;
-    const activeTab = isControlled ? selectedTab : internalTab;
-  
-    const handleTabClick = (index) => {
-      if (isControlled) {
-        onTabClick(index);
-      } else {
-        setInternalTab(index);
-      }
+const Category = ({ labels, onTabClick, selectedTab }) => {
+    const handleTabClick = (label) => {
+        onTabClick(label); 
     };
-  
+
     return (
-      <CategoryContainer>
-        <Button onClick={() => handleTabClick(0)} $isSelected={activeTab === 0}>
-        {leftText}
-        </Button>
-
-        <Button onClick={() => handleTabClick(1)} $isSelected={activeTab === 1}>
-        {rightText}
-        </Button>
-
-      </CategoryContainer>
+        <CategoryContainer>
+            {labels.map((label) => (
+                <Button
+                    key={label} 
+                    onClick={() => handleTabClick(label)} 
+                    $isSelected={selectedTab === label} 
+                >
+                    {label}
+                </Button>
+            ))}
+        </CategoryContainer>
     );
 };
+
 export default Category;
