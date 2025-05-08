@@ -5,7 +5,7 @@ import Category from '../../components/common/Category/Cateogry';
 import Button from '../../components/common/Button/Button';
 import Input from '../../components/common/Input/Input';
 import defaultImage from '../../assets/icons/defaultProfile.svg';
-import * as S from './HomePage';
+import * as S from './Style';
 
 const HomePage = () => {
     const categories = ["혈당", "혈압", "체중", "수면"];

@@ -4,7 +4,9 @@ import Card from '../../components/common/Card/Card';
 import CalendarHeader from '../../components/Calendar/Header';
 import CalendarGrid from '../../components/Calendar/Calendar';
 
-const CalendarContainer = styled.div``;
+const CalendarContainer = styled.div`
+  margin-bottom:100px;
+`;
 
 const Title = styled.h2`
   color: #474A52;
@@ -12,7 +14,7 @@ const Title = styled.h2`
   font-size: 16px;
 `;
 
-const Text = styled.p`
+const Content = styled.p`
   margin-top: 4px;
   color: var(--greyscale-600, #686B73);
   font-family: Pretendard;
@@ -54,10 +56,10 @@ function CalendarPage() {
     <CalendarContainer>
       <Card>
         <Title>나의 캘린더</Title>
-        <Text>
+        <Content>
           캘린더에 이것저것 기록하며, 일정 관리를 해보세요.<br />
           날짜를 터치하면 일정을 확인하거나 기록할 수 있습니다.
-        </Text>
+        </Content>
       </Card>
 
       <Card>
@@ -80,7 +82,16 @@ function CalendarPage() {
 
       {selectedDate && (
         <Detail>
-          <p>{selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일</p>
+          <Card>
+            <Title>일정 기록하기</Title>
+          <Title>{selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일</Title>
+          <Content>을 기준으로 기록합니다.</Content>
+
+          </Card>
+          <Card>
+            <Title>상세 일정 확인하기</Title>
+            <Content>일정이 없습니다.</Content>
+          </Card>
         </Detail>
       )}
     </CalendarContainer>

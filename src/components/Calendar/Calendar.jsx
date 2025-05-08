@@ -7,11 +7,12 @@ const Grid = styled.div`
 `;
 
 const DayName = styled.div`
-  text-align: center;
+  align-items: flex-start;
+  // text-align: center;
   font-weight: bold;
   color: ${({ dayOfWeek }) =>
     dayOfWeek === 0 ? '#CC2F2F' : dayOfWeek === 6 ? '#2F56CC' : '#555'};
-  margin-bottom: 7px;
+  // margin-bottom: 7px;
 `;
 
 const Day = styled.div`
@@ -34,7 +35,7 @@ const Day = styled.div`
   justify-content: flex-start;
   font-size: 14px;
   font-family: Pretendard-SemiBold;
-  margin-bottom: 16px;
+  margin-top: 16px;
 `;
 
 function Calendar({ weeks, today, selectedDate, year, month, onDateClick }) {

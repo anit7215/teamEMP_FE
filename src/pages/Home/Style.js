@@ -87,6 +87,7 @@ export const MeIcon = styled.div`
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+    flex-shrink: 0;
 `;
 
 export const InfoContainer = styled.div`
@@ -111,5 +112,8 @@ export const FamilyCode = styled.div`
 export const TagContainer = styled.div`
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
+  height:30px;
+  flex-wrap:    nowrap;
+  white-space: nowrap;
+  
 `;
