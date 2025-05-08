@@ -1,15 +1,9 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-    display: flex;
-    font-family:'Pretendard-SemiBold';
-    flex-direction: column;
-    margin:32px;
-    gap: 16px;
-`;
-
 export const Title = styled.div`
-    font-size:32px;
+    font-size:22px;
+    font-family:'Pretendard-SemiBold';
+
 `;
 
 export const Input = styled.input`
