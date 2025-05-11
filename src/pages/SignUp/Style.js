@@ -9,21 +9,38 @@ export const Container = styled.div`
 
 export const Title = styled.div`
   color: #474a52;
-  font-family: Pretendard;
-  font-size: 16px;
+  font-family:'Pretendard-SemiBold';
+  font-size: 22px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  margin-bottom: 16px;
 `;
 
 export const Input = styled.input`
-    display: flex;
-    height:18px;
-    padding: 16px 32px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 15px;
-    border: 1.5px solid #D9D9D9;
-    font-size:20px;
-    margin-top:16px;
+  width: 100%;
+  padding: 20px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  border: 1px solid ${({ hasError }) => (hasError ? 'red' : '#999')};
+  border-radius: 15px;
+  outline: none;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 400;
+  gap: 10px;
+  &:focus {
+    border-color: #00A79F;
+  }
+   
 `;
+
+
+
+export const ErrorMessage = styled.p`
+  color: red;
+  font-size: 13px;
+  margin: 0 0 16px 0;
+`;
+
