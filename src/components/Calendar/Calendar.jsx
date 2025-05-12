@@ -4,15 +4,14 @@ import styled from 'styled-components';
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
 `;
 
 const DayName = styled.div`
   align-items: flex-start;
-  // text-align: center;
   font-weight: bold;
   color: ${({ dayOfWeek }) =>
     dayOfWeek === 0 ? '#CC2F2F' : dayOfWeek === 6 ? '#2F56CC' : '#555'};
-  // margin-bottom: 7px;
 `;
 
 const Day = styled.div`

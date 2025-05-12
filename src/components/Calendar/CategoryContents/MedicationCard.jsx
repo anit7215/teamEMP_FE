@@ -28,7 +28,7 @@ const MedicationCard = () => {
   return (
     <>
       <S.Content>복약알림을 받거나, 캘린더에 복약기간을 등록해보세요.</S.Content>
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+      <div style={{ display: 'flex', gap: '16px' }}>
         <S.Wrapper>
             <S.Text>
                 <S.Title>병명</S.Title>
@@ -98,10 +98,34 @@ const MedicationCard = () => {
         </S.TimeCheckboxWrapper>
 
       
-      <S.Text>
         <S.Title>복약 알림</S.Title>
         <S.AddText>07시, 12시, 18시에 푸시 형태로 전송</S.AddText>
-      </S.Text>
+        <S.TimeCheckboxWrapper>
+          <S.CheckWrapper>
+              <CustomCheckbox
+              label="아침"
+              checked={times.morning}
+              onChange={() => toggle('morning')}
+            />
+            <S.InputField/>
+          </S.CheckWrapper>
+        <S.CheckWrapper>
+        <CustomCheckbox
+            label="점심"
+            checked={times.noon}
+            onChange={() => toggle('noon')}
+        />
+        <S.InputField/>
+        </S.CheckWrapper>
+         <S.CheckWrapper>
+        <CustomCheckbox
+            label="저녁"
+            checked={times.evening}
+            onChange={() => toggle('evening')}
+        />
+        <S.InputField/>
+         </S.CheckWrapper>
+        </S.TimeCheckboxWrapper>
       
       <S.Title>일정공개 여부</S.Title>
       <Category labels={secret} selectedTab={selectedSecret}  onTabClick={setSelectedSecret}buttonStyle="gradient" />

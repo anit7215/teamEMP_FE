@@ -8,6 +8,7 @@ const Label = styled.label`
   font-size: 14px;
   color: #474a52;
   cursor: pointer;
+  white-space: nowrap;
 `;
 
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
@@ -15,11 +16,11 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 `;
 
 const StyledCheckbox = styled.div`
-  width: 26px;
-  height: 26px;
-  border-radius: 4px;
-  border: 1.5px solid #999;
-  background: ${({ checked }) => (checked ? '#6EC3C7' : 'transparent')};
+  width: 16px;
+  height: 16px;
+  border-radius: 1px;
+  border: 0.8px solid #999;
+  background: ${({ checked }) => (checked ? '#42CCC5' : 'transparent')};
   display: flex;
   align-items: center;
   justify-content: center;
