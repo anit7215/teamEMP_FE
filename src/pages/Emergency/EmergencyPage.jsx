@@ -1,115 +1,72 @@
 import React, { useState } from 'react';
 import Card from '../../components/common/Card/Card';
 import Button from '../../components/common/Button/Button';
-import AddressContainer from '../../components/Dropdown/AddressSelect';
-import addressdata from '../../components/Dropdown/AddressSelect';
+import AddressSelect from '../../components/Dropdown/AddressSelect';
 import { Title } from '../Statistics/Style';
 import Dropdown from '../../components/Dropdown/Dropdown';
-import styled from 'styled-components';
-
-const Table = styled.div`
-    border-top: 1px solid #999;
-    border-bottom: 1px solid #999;
-    background: #FFF;
-    width: 100%; //사실 이건 화면에 너무 안 보여서 넣어본,,,width 넣어도 되는지?
-`;
-
-const TBody = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-const TR = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 10px;
-    border-top: 1px solid #999;
-    border-bottom: 1px solid #999;
-`;
-
-const TD = styled.p`
-    color: #474A52;
-    font-family: Pretendard-SemiBold;
-    font-size: 12px;
-    margin: 0;
-`;
+import GoogleMap from '../../assets/icons/GoogleMap.png';
+import * as S from './Style';
 
 const EmergencyPage = () => {
-    const [selected1, setSelect1] = useState('');
-    const [selected2, setSelect2] = useState('');
 
-    const handleSelect1 = (region) => {
-        setSelect1(region); 
-        setSelect2(''); //이게 문제인 것 같기도 함...
+    const handleAddressChange = (address) => {
+        console.log("선택된 주소:", address); //콘솔 출력 확인용
     };
 
-    const handleSelect2 = (city) => {
-        setSelect2(city); //일단 이 리스트도 아직 불러오지 못 함...
-    };
+    console.log("이미지 경로 확인:", GoogleMap);
+
     return (
         <><Card>
-            <Title>
+            <S.Title>
                 주변 응급실 조회
-            </Title>
-            <Title>
+            </S.Title>
+            <S.Content>
                 주소
-            </Title>
-            <AddressContainer>
-                <Dropdown
-                    options={Object.keys(addressdata)}
-                    selected={selected1}
-                    onSelect={handleSelect1}
-                    placeholder={"도/특별시/광역시"} />
-                {selected1 && (
-                    <Dropdown
-                        options={addressdata[selected1]}
-                        selected={selected2}
-                        onSelect={handleSelect2}
-                        placeholder={"시/군/구"} />
-                )}
-            </AddressContainer>
+            </S.Content>
+            <AddressSelect onChange={handleAddressChange} />
             <Button text={"현 위치 기반으로 응급실 찾기"} />
-        </Card><EmergencyPageTable /></>
+        </Card>
+        <S.Img src={GoogleMap} alt="GoogleMap"/>
+        <EmergencyPageTable /></>
     );
 };
 
 function EmergencyPageTable() {
     return(
-        <Table>
-        <TBody>
-        <TR>
-            <TD>
+        <S.Table>
+        <S.TBody>
+        <S.TR>
+            <S.TD>
                 어쩌구저쩌고병원응급실
-            </TD>
-        </TR>
-        <TR>
-            <TD>
+            </S.TD>
+        </S.TR>
+        <S.TR>
+            <S.TD>
                 어쩌구저쩌고병원응급실
-            </TD>
-        </TR>
-        <TR>
-            <TD>
+            </S.TD>
+        </S.TR>
+        <S.TR>
+            <S.TD>
                 어쩌구저쩌고병원응급실
-            </TD>
-        </TR>
-        <TR>
-            <TD>
+            </S.TD>
+        </S.TR>
+        <S.TR>
+            <S.TD>
                 어쩌구저쩌고병원응급실
-            </TD>
-        </TR>
-        <TR>
-            <TD>
+            </S.TD>
+        </S.TR>
+        <S.TR>
+            <S.TD>
                 어쩌구저쩌고병원응급실
-            </TD>
-        </TR>
-        <TR>
-            <TD>
+            </S.TD>
+        </S.TR>
+        <S.TR>
+            <S.TD>
                 어쩌구저쩌고병원응급실
-            </TD>
-        </TR>
-        </TBody>
-    </Table>
+            </S.TD>
+        </S.TR>
+        </S.TBody>
+    </S.Table>
     );
 };
 export default EmergencyPage;
