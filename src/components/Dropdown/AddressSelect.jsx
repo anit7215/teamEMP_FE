@@ -85,7 +85,7 @@ const addressData = {
     };
   
     return (
-      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+      <div style={{ display: "flex", width: "100%", height: "50px", padding: "0px 4px 18px 4px", gap: "10px", alignItems: "center"}}>
         <Dropdown
           items={Object.keys(addressData)}
           selectedItem={selectedCity}
