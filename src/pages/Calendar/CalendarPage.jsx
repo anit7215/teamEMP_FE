@@ -3,9 +3,14 @@ import styled from 'styled-components';
 import Card from '../../components/common/Card/Card';
 import CalendarHeader from '../../components/Calendar/Header';
 import CalendarGrid from '../../components/Calendar/Calendar';
+import Modal from '../../components/common/Modal/Modal';
+import Category from '../../components/common/Category/Cateogry';
+import MedicationCard from '../../components/Calendar/CategoryContents/MedicationCard';
+import TreatmentCard from '../../components/Calendar/CategoryContents/TreatmentCard';
+import ScheduleCard from '../../components/Calendar/CategoryContents/ScheduleCard';
 
 const CalendarContainer = styled.div`
-  margin-bottom:100px;
+  margin-bottom: 100px;
 `;
 
 const Title = styled.h2`
@@ -17,23 +22,22 @@ const Title = styled.h2`
 const Content = styled.p`
   margin-top: 4px;
   color: var(--greyscale-600, #686B73);
-  font-family: Pretendard;
+  font-family: Pretendard-Regular;
   font-size: 11px;
-  font-style: normal;
   font-weight: 400;
   line-height: 14px;
 `;
 
-const Detail = styled.div`
-  margin-top: 16px;
-  padding: 10px;
-`;
-
 function CalendarPage() {
   const today = new Date();
+  const categories = ["복약관리", "진료관리", "진료일정"];
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const weeks = getMonthData(year, month);
@@ -51,7 +55,6 @@ function CalendarPage() {
   const handleDateClick = (day) => {
     if (day) setSelectedDate(new Date(year, month, day));
   };
-
   return (
     <CalendarContainer>
       <Card>
@@ -81,18 +84,31 @@ function CalendarPage() {
       </Card>
 
       {selectedDate && (
-        <Detail>
+        <Modal onClose={() => setSelectedDate(null)}>
           <Card>
             <Title>일정 기록하기</Title>
-          <Title>{selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일</Title>
-          <Content>을 기준으로 기록합니다.</Content>
-
+            <div style={{ display:'flex', marginTop: '8px', marginBottom: '8px', alignItems: 'center', color:'#686B73', gap: '4px' }}>
+              <div style={{ fontFamily:'Pretendard-Medium', fontSize: '20px'}}>
+                {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일 
+              </div>
+              <Content> 을 기준으로 기록합니다.</Content>  
+            </div>
+<div style={{width:'70%', alignItems:'center', margin:'4px auto', marignTop:'4px'}}>
+              <Category labels={categories} selectedTab={selectedCategory} onTabClick={handleCategoryChange} buttonStyle="gradient" />
+            </div>
           </Card>
+          <Card>
+            
+          <Title>{selectedCategory}</Title>
+          {selectedCategory === "복약관리" && <MedicationCard />}
+          {selectedCategory === "진료관리" && <TreatmentCard />}
+          {selectedCategory === "진료일정" && <ScheduleCard />}
+        </Card>
           <Card>
             <Title>상세 일정 확인하기</Title>
             <Content>일정이 없습니다.</Content>
           </Card>
-        </Detail>
+        </Modal>
       )}
     </CalendarContainer>
   );
