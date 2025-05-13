@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled.button`
     display: flex;
     background:${({disabled})=>(disabled? '#9FA1A8':'#00A79F')};
     border-radius: 15px; 
@@ -8,6 +8,7 @@ export const Container = styled.div`
     padding: 16px;
     justify-content: center;
     align-items: center;
+    border: none;
 `;
 
 export const Text = styled.div`

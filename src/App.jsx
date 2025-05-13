@@ -16,6 +16,11 @@ import NotificationPage from './pages/Notification/NotificationPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
 import MainLayout from './layout/MainLayout';
 import LoginLayout from './layout/LoginLayout';
+import KakaoLoginRedirectPage from './pages/Login/KakaoLoginRedirectPage';
+import NaverLoginRedirectPage from './pages/Login/NaverLoginRedirectPage';
+import GoogleLoginRedirectPage from './pages/Login/GoogleLoginRedirectPage';
+import { AuthProvider } from './context/AuthContext';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -71,6 +76,18 @@ const router = createBrowserRouter([
             element: <SignUpPage/>
           },
           {
+            path: 'login-success',
+            element: <KakaoLoginRedirectPage />,
+          },
+          {
+            path: 'login-success',
+            element: <NaverLoginRedirectPage />,
+          },
+          {
+            path: 'login-success',
+            element: <GoogleLoginRedirectPage />,
+          },
+          {
             path:'profileSetting',
             element:<ProfileSettingPage/>,
           },
@@ -83,7 +100,11 @@ const router = createBrowserRouter([
 
 ])
 function App() {
-  return <RouterProvider router={router}/>
+  return (
+  <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;

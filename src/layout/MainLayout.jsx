@@ -1,9 +1,16 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import Header from '../components/common/Header/Header';
 import NavBar from '../components/common/NavBar/NavBar';
+import { useAuth } from '../context/AuthContext';
 import styled from 'styled-components';
 const MainLayout = () => {
+    const { accessToken } = useAuth();
+
+    if(!accessToken) {
+        return <Navigate to = {'/'} replace/>
+    }
+
     return(
         <LayoutContainer>
             <Header/>
