@@ -56,11 +56,13 @@ export const TimeCheckboxWrapper = styled.div`
   justify-content: space-between;
   max-width: 300px;
   margin: 8px 0 16px;
+  gap: 33px;
 `;
 
 export const CheckWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 export const Label = styled.label`
   display: flex;

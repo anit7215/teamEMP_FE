@@ -10,7 +10,7 @@ const ScheduleCard = () => {
   return (
     <>
       <S.Content>진료장소, 간단한 길안내 등을 기록해보세요.</S.Content>
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+      <div style={{ display: 'flex', gap: '16px', margin: '16px 0'}}>
         <S.Wrapper>
             <S.Text>
                 <S.Title>장소</S.Title>
@@ -28,9 +28,17 @@ const ScheduleCard = () => {
       </div>
 
       <S.Title>메모</S.Title>
+          <div style={{ marginBottom: '16px'}}>
+          <S.InputField></S.InputField>
+          <S.InputField></S.InputField>
+          <S.InputField></S.InputField>
+          <S.InputField></S.InputField>
+          </div>
 
       <S.Title>일정공개 여부</S.Title>
+      <div style={{marginTop: '8px', marginBottom: '8px'}}>
       <Category labels={secret} selectedTab={selectedSecret}  onTabClick={setSelectedSecret}buttonStyle="gradient" />
+      </div>
 
 
       <Button text="진료일정 기록완료" />
