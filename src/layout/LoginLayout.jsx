@@ -17,5 +17,5 @@ const LayoutContainer = styled.div`
     margin-top:64px;
     margin-left:25px;
     margin-right:25px;
-    margin-bottom:35px;
+    margin-bottom:160px;
 `;

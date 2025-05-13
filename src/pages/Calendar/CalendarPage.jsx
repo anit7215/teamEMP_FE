@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Card from '../../components/common/Card/Card';
 import CalendarHeader from '../../components/Calendar/Header';
 import CalendarGrid from '../../components/Calendar/Calendar';
+import { getMonthData } from '../../utils/calendar';
+import SelectedDateModal from '../../components/Calendar/SelectedDateModal';
 
 const CalendarContainer = styled.div`
-  margin-bottom:100px;
+  margin-bottom: 100px;
 `;
 
 const Title = styled.h2`
@@ -17,23 +19,28 @@ const Title = styled.h2`
 const Content = styled.p`
   margin-top: 4px;
   color: var(--greyscale-600, #686B73);
-  font-family: Pretendard;
+  font-family: Pretendard-Regular;
   font-size: 11px;
-  font-style: normal;
   font-weight: 400;
   line-height: 14px;
 `;
 
-const Detail = styled.div`
-  margin-top: 16px;
-  padding: 10px;
-`;
-
 function CalendarPage() {
   const today = new Date();
+  // 일정 임시 데이터
+  const events = {
+  '2025-05-16': ['진료', '약 복용'],
+  '2025-05-18': ['치과 예약'],
+  '2025-06-20': ['약 복용', '진료'],
+  }; 
+  const categories = ["복약관리", "진료관리", "진료일정"];
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const weeks = getMonthData(year, month);
@@ -51,7 +58,6 @@ function CalendarPage() {
   const handleDateClick = (day) => {
     if (day) setSelectedDate(new Date(year, month, day));
   };
-
   return (
     <CalendarContainer>
       <Card>
@@ -77,49 +83,16 @@ function CalendarPage() {
           year={year}
           month={month}
           onDateClick={handleDateClick}
+          events={events}
         />
       </Card>
 
       {selectedDate && (
-        <Detail>
-          <Card>
-            <Title>일정 기록하기</Title>
-          <Title>{selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월 {selectedDate.getDate()}일</Title>
-          <Content>을 기준으로 기록합니다.</Content>
-
-          </Card>
-          <Card>
-            <Title>상세 일정 확인하기</Title>
-            <Content>일정이 없습니다.</Content>
-          </Card>
-        </Detail>
+        <SelectedDateModal selectedDate={selectedDate} onClose={() => setSelectedDate(null)} selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} categories={categories}
+  />
       )}
     </CalendarContainer>
   );
-}
-
-function getMonthData(year, month) {
-  const firstDay = new Date(year, month, 1).getDay();
-  const lastDate = new Date(year, month + 1, 0).getDate();
-
-  const weeks = [];
-  let dayCounter = 1;
-
-  let firstWeek = new Array(7).fill(null);
-  for (let i = firstDay; i < 7; i++) {
-    firstWeek[i] = dayCounter++;
-  }
-  weeks.push(firstWeek);
-
-  while (dayCounter <= lastDate) {
-    let week = new Array(7).fill(null);
-    for (let i = 0; i < 7 && dayCounter <= lastDate; i++) {
-      week[i] = dayCounter++;
-    }
-    weeks.push(week);
-  }
-
-  return weeks;
 }
 
 export default CalendarPage;

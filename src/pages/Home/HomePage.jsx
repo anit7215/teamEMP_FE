@@ -83,7 +83,7 @@ const HomePage = () => {
                 <S.Content>
                     오늘의 건강기록을 통하여 나의 건강을 분석해봅시다.
                 </S.Content>
-                <Category labels={categories} selectedTab={selectedCategory} onTabClick={handleCategoryChange} />
+                <Category labels={categories} selectedTab={selectedCategory} onTabClick={handleCategoryChange} buttonStyle="default" />
             </Card>
             <Card>
                 <S.Title>{title}</S.Title>
