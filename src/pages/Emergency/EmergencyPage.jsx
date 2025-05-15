@@ -18,16 +18,28 @@ const EmergencyPage = () => {
     return (
         <><Card>
             <S.Title>
-                주변 응급실 조회
+                주변 응급실 및 제세동기 조회
             </S.Title>
             <S.Content>
                 주소
             </S.Content>
             <AddressSelect onChange={handleAddressChange} />
-            <Button text={"현 위치 기반으로 응급실 찾기"} />
+            <S.ButtonWrapper>
+                <Button type= "button" text={"응급실 찾기"} />
+                <Button type= "button" text={"제세동기 찾기"} />
+            </S.ButtonWrapper>
+            <S.ButtonWrapper>
+            <Button type= "button" buttonStyle = "gradient" text={"현 위치 기반으로 응급실 찾기"} />
+            </S.ButtonWrapper>
         </Card>
-        <S.Img src={GoogleMap} alt="GoogleMap"/>
-        <EmergencyPageTable /></>
+        <Card>
+            <S.Content>
+                주변 제세동기 목록
+            </S.Content>
+            <S.Img src={GoogleMap} alt="GoogleMap"/>
+            <EmergencyPageTable />
+        </Card>
+        </>
     );
 };
 

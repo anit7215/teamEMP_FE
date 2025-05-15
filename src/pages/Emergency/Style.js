@@ -23,7 +23,22 @@ export const Content = styled.div`
   white-space: nowrap
 `;
 
+export const ButtonWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  margin: 8px 0px;
+  justify-content: center;
+  align-items: center;
+
+  & > button {
+    flex: 1;
+    height: 38px;
+  }
+`;
 export const Img = styled.img`
+    display: flex;
+    margin: 8px 0px;
     width: 100%;
     height: 292px;
 `;
