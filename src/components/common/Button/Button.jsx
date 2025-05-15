@@ -2,7 +2,7 @@ import React from 'react';
 import * as S from './Style';
 import { useNavigate } from 'react-router-dom';
 
-const Button = ({ text, to, disabled = false, onClick, type }) => {
+const Button = ({ text, to, disabled = false, onClick, type, buttonStyle }) => {
     const navigate = useNavigate();
 
     const handleClick = (e) => { 
@@ -15,7 +15,7 @@ const Button = ({ text, to, disabled = false, onClick, type }) => {
     };
 
     return (
-        <S.Container type={type} onClick={handleClick} disabled={disabled}>
+        <S.Container type={type} onClick={handleClick} disabled={disabled} buttonStyle={buttonStyle}>
             <S.Text>{text}</S.Text>
         </S.Container>
     );
