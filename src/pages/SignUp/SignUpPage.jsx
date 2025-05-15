@@ -20,8 +20,8 @@ const SignupPage = () => {
       const response = await postSignup({ email, password });
       console.log(response);
       alert('회원가입 성공!');
-      window.location.href = '/login';
-      // window.location.href = '/profilesetting';
+      // window.location.href = '/login';
+      window.location.href = '/profilesetting';
     } catch (error) {
       console.error('회원가입 실패:', error);
       if (error.response && error.response.data.code === 'AUTH-004') {
@@ -59,20 +59,16 @@ const SignupPage = () => {
         {errors.email && <S.ErrorMessage>{errors.email.message}</S.ErrorMessage>}
 
         <S.Input
-          type="password"
-          {...register('password', {
-            required: '비밀번호를 반드시 입력해주세요.',
-            minLength: {
-              value: 8,
-              message: '비밀번호는 8 ~ 16자 사이로 입력해주세요!',
-            },
-            maxLength: {
-              value: 16,
-              message: '비밀번호는 8 ~ 16자 사이로 입력해주세요!',
-            },
-          })}
-          placeholder="비밀번호를 입력하세요."
-          hasError={!!errors.password}
+        type="password"
+        {...register('password', {
+          required: '비밀번호를 반드시 입력해주세요.',
+          pattern: {
+            value: /^(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/,
+            message: '비밀번호는 8자 이상, 숫자와 특수문자를 포함해야 합니다.',
+          },
+        })}
+        placeholder="비밀번호를 입력하세요."
+        hasError={!!errors.password}
         />
         {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
 

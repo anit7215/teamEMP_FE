@@ -31,7 +31,7 @@ console.log("저장된 refreshToken:", localStorage.getItem(LOCAL_STORAGE_KEY.re
         }
       } catch (e) {
         alert("로그인 중 오류가 발생했습니다.");
-        window.location.href = "/login";
+        window.location.href = "/";
       }
     })();
   }

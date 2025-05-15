@@ -5,7 +5,7 @@ import { postExchangeToken } from "../../apis/auth";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 
-const GoogleLoginRedirectPage = () => {
+const LoginSuccessPage = () => {
   const { setItem: setAccessToken } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
   const { setItem: setRefreshToken } = useLocalStorage(LOCAL_STORAGE_KEY.refreshToken);
 
@@ -29,7 +29,7 @@ const GoogleLoginRedirectPage = () => {
         }
       } catch (e) {
         alert("로그인 중 오류가 발생했습니다.");
-        window.location.href = "/";
+        window.location.href = "/login";
       }
     })();
   }
@@ -38,4 +38,4 @@ const GoogleLoginRedirectPage = () => {
   return <div><LoadingSpinner /></div>;
 };
 
-export default GoogleLoginRedirectPage;
+export default LoginSuccessPage;

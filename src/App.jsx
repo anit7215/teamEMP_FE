@@ -19,6 +19,8 @@ import LoginLayout from './layout/LoginLayout';
 import KakaoLoginRedirectPage from './pages/Login/KakaoLoginRedirectPage';
 import NaverLoginRedirectPage from './pages/Login/NaverLoginRedirectPage';
 import GoogleLoginRedirectPage from './pages/Login/GoogleLoginRedirectPage';
+import LoginSuccessPage from './pages/Login/LoginSuccessPage';
+import LoginFailPage from './pages/Login/LoginFailPage';
 import { AuthProvider } from './context/AuthContext';
 
 const router = createBrowserRouter([
@@ -76,16 +78,24 @@ const router = createBrowserRouter([
             element: <SignUpPage/>
           },
           {
-            path: 'login-success',
+            path: 'login-success/kakao',
             element: <KakaoLoginRedirectPage />,
           },
           {
-            path: 'login-success',
+            path: 'login-success/naver',
             element: <NaverLoginRedirectPage />,
           },
           {
-            path: 'login-success',
+            path: 'login-success/google',
             element: <GoogleLoginRedirectPage />,
+          },
+          {
+            path: 'login-success',
+            element: <LoginSuccessPage />,
+          },
+          {
+            path: 'login-failed',
+            element: <LoginFailPage />,
           },
           {
             path:'profileSetting',

@@ -7,9 +7,9 @@ import styled from 'styled-components';
 const MainLayout = () => {
     const { accessToken } = useAuth();
 
-    if(!accessToken) {
-        return <Navigate to = {'/'} replace/>
-    }
+    // if(!accessToken) {
+    //     return <Navigate to = {'/'} replace/>
+    // }
 
     return(
         <LayoutContainer>

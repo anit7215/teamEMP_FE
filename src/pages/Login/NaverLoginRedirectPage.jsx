@@ -28,7 +28,7 @@ const NaverLoginRedirectPage = () => {
         }
       } catch (e) {
         alert("로그인 중 오류가 발생했습니다.");
-        window.location.href = "/login";
+        window.location.href = "/";
       }
     })();
   }

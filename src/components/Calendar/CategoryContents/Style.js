@@ -29,16 +29,20 @@ export const AddText = styled.div`
 `;
 
 export const InputField = styled.input`
-display: flex;
-// height: 30px;
-width: 100%;
-padding: 8px 4px 4px 4px;
-align-items: center;
-gap: 10px;
-border:none;
-border-bottom: 0.5px solid #999;
-background: #FFF;
+  display: flex;
+  width: 100%;
+  padding: 8px 4px 4px 4px;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  border-bottom: 0.5px solid #999;
+  background: #FFF;
+
+  &:focus {
+    outline: none;
+  }
 `;
+
 
 export const Wrapper = styled.div`
   width: calc(50% - 8px);

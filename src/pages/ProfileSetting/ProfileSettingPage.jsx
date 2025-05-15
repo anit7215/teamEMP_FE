@@ -89,7 +89,7 @@ const ProfileSettingPage = () => {
           <AddressSelect onChange={setAddress} />
         </S.AddressWrapper>
 
-        <Button text={"회원정보 입력 완료하기"} to={"/home"} disabled={isButtonDisabled} />
+        <Button text={"회원정보 입력 완료하기"} to={"/login"} disabled={isButtonDisabled} />
       </S.Container>
     </Card>
   );
