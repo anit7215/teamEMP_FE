@@ -58,7 +58,7 @@ export const Text = styled.div`
 export const TimeCheckboxWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  max-width: 300px;
+  // max-width: 300px;
   margin: 8px 0 16px;
   gap: 33px;
 `;

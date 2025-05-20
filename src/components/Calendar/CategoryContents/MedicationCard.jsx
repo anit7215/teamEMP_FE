@@ -37,21 +37,12 @@ const MedicationCard = () => {
   return (
     <>
       <S.Content>복약알림을 받거나, 캘린더에 복약기간을 등록해보세요.</S.Content>
-      <div style={{ display: 'flex', gap: '16px', margin: '16px 0'}}>
-        <S.Wrapper>
+      <div style={{ display: 'flex', margin: '16px 0', flexWrap: 'wrap'}}>
             <S.Text>
                 <S.Title>병명</S.Title>
                 <S.AddText>필수, 최대 10자</S.AddText>
             </S.Text>
             <Input  label="병명" placeholder="병명을 입력하세요." />
-        </S.Wrapper>
-        <S.Wrapper>
-            <S.Text>
-                <S.Title>특이사항</S.Title>
-                <S.AddText>선택, 최대 10자</S.AddText>
-            </S.Text>
-            <Input label="특이사항" placeholder="특이사항을 입력하세요." />
-        </S.Wrapper>
       </div>
       
       
@@ -98,7 +89,7 @@ const MedicationCard = () => {
               checked={times.morning}
               onChange={() => toggleTimes('morning')}
             />
-            <S.InputField/>
+            <S.InputField placeholder="주의사항"/>
           </S.CheckWrapper>
         <S.CheckWrapper>
         <CustomCheckbox
@@ -106,7 +97,7 @@ const MedicationCard = () => {
             checked={times.noon}
             onChange={() => toggleTimes('noon')}
         />
-        <S.InputField/>
+        <S.InputField placeholder="주의사항"/>
         </S.CheckWrapper>
          <S.CheckWrapper>
         <CustomCheckbox
@@ -114,7 +105,7 @@ const MedicationCard = () => {
             checked={times.evening}
             onChange={() => toggleTimes('evening')}
         />
-        <S.InputField/>
+        <S.InputField placeholder="주의사항"/>
          </S.CheckWrapper>
         </S.TimeCheckboxWrapper>
 

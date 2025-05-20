@@ -36,11 +36,12 @@ function CalendarPage() {
   const categories = ["복약관리", "진료관리", "진료일정"];
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+  setSelectedCategory(prev => (prev === category ? null : category));
   };
+
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const weeks = getMonthData(year, month);
