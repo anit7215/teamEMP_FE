@@ -25,3 +25,21 @@ export const postRefreshToken = async (refreshToken) => {
   });
   return data;
 };
+
+export const createCalendarEvent = async (data) => {
+  const response = await axiosInstance.post('/api/auth/user/calendar-event', data);
+  return response.data;
+};
+
+export const getCalendarEventsByDate = async (date) => {
+  const { data } = await axiosInstance.get(`/api/auth/user/calendar/date`, {
+    params: { date },
+  });
+  return data;
+};
+
+export const postUserProfile = async (profileData) => {
+  const { data } = await axiosInstance.post("/api/auth/semi/feature", profileData);
+  return data;
+};
+

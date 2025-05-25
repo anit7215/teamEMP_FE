@@ -11,6 +11,10 @@ const MainLayout = () => {
     //     return <Navigate to = {'/'} replace/>
     // }
 
+    // if (accessToken && location.pathname === '/') {
+    //     return <Navigate to="/home" replace />;
+    // }
+
     return(
         <LayoutContainer>
             <Header/>

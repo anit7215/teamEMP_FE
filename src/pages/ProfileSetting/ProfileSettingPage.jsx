@@ -5,29 +5,52 @@ import Input from "../../components/common/Input/Input";
 import * as S from "./Style";
 import DateSelect from "../../components/Dropdown/DateSelect";
 import AddressSelect from "../../components/Dropdown/AddressSelect";
-// import Modal from "../../components/Modal/Modal";
+import { postUserProfile } from "../../apis/auth";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { LOCAL_STORAGE_KEY } from "../../constants/key";
+import { useNavigate } from "react-router-dom";
 
 const ProfileSettingPage = () => {
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [birth, setBirth] = useState({ year: null, month: null, day: null }); 
   const [address, setAddress] = useState("");
+  const navigate = useNavigate();
 
-  const handleBirthChange = (date) => {
+  const { setItem: setAccessToken } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
+  const { setItem: setRefreshToken } = useLocalStorage(LOCAL_STORAGE_KEY.refreshToken);
+ const handleBirthChange = (date) => {
     setBirth(date);  
     console.log("생년월일 변경됨:", date);
   };
 
   console.log(name, gender, birth, address);
+  const handleSubmit = async () => {
+    try {
+      const profileData = {
+        username: name,
+        birthday: `${birth.year}-${String(birth.month).padStart(2, "0")}-${String(birth.day).padStart(2, "0")}`,
+        gender: gender === "남성" ? "Male" : "Female",
+        address,
+      };
 
-  const isButtonDisabled = !(
-    name.trim() &&
-    gender &&
-    birth.year &&
-    birth.month &&
-    birth.day &&
-    (address.includes(" ") && address.split(" ").length === 2)
-  );
+      const res = await postUserProfile(profileData);
+
+      const { accessToken, refreshToken } = res.data;
+
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
+
+      alert("프로필 등록 및 권한 설정 완료!");
+      navigate("/home");
+    } catch (error) {
+      console.error("프로필 등록 실패:", error);
+      alert("회원정보 등록 중 오류가 발생했습니다.");
+    }
+  };
+
+  const isButtonDisabled = !(name.trim() && gender && birth.year && birth.month && birth.day &&
+    (address.includes(" ") && address.split(" ").length === 2));
 
   return (
     <Card>
@@ -89,7 +112,7 @@ const ProfileSettingPage = () => {
           <AddressSelect onChange={setAddress} />
         </S.AddressWrapper>
 
-        <Button text={"회원정보 입력 완료하기"} to={"/login"} disabled={isButtonDisabled} />
+        <Button text={"회원정보 입력 완료하기"} onClick={handleSubmit} disabled={isButtonDisabled} />
       </S.Container>
     </Card>
   );

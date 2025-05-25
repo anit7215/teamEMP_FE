@@ -25,10 +25,7 @@ const TreatmentCard = () => {
       </div>
     <S.Title>메모</S.Title>
     <div style={{ marginBottom: '16px'}}>
-    <S.InputField></S.InputField>
-    <S.InputField></S.InputField>
-    <S.InputField></S.InputField>
-    <S.InputField></S.InputField>
+    <S.InputField placeholder='메모를 입력하세요.'/>
     </div>
     
 

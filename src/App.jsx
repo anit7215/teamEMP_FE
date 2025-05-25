@@ -21,6 +21,7 @@ import NaverLoginRedirectPage from './pages/Login/NaverLoginRedirectPage';
 import GoogleLoginRedirectPage from './pages/Login/GoogleLoginRedirectPage';
 import LoginSuccessPage from './pages/Login/LoginSuccessPage';
 import LoginFailPage from './pages/Login/LoginFailPage';
+import NotFound from './pages/Error/ErrorPage';
 import { AuthProvider } from './context/AuthContext';
 
 const router = createBrowserRouter([
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
   },
   {
       element: <MainLayout/>,
-      // errorElement: <NotFound/>,
+      errorElement: <NotFound/>,
       children: [
           {
             path:'home',
@@ -98,7 +99,7 @@ const router = createBrowserRouter([
             element: <LoginFailPage />,
           },
           {
-            path:'profileSetting',
+            path:'profilesetting',
             element:<ProfileSettingPage/>,
           },
           {
@@ -107,8 +108,12 @@ const router = createBrowserRouter([
           },
       ]
   },
+  {
+    path: '*',
+    element: <NotFound />
+  }
 
-])
+]);
 function App() {
   return (
   <AuthProvider>

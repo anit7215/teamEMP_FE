@@ -28,15 +28,25 @@ export const AddText = styled.div`
   line-height: normal;
 `;
 
-export const InputField = styled.input`
+export const InputField = styled.textarea`
   display: flex;
+  box-sizing: border-box;
   width: 100%;
-  padding: 8px 4px 4px 4px;
-  align-items: center;
-  gap: 10px;
+  padding: 8px 10px;
+  // line-height: 31px;
+  line-height: 1.5;
   border: none;
   border-bottom: 0.5px solid #999;
-  background: #FFF;
+  margin-bottom: 16px;
+  background-attachment: local;
+  background-image:
+    linear-gradient(to right, white 5px, transparent 5px),
+    linear-gradient(to left, white 5px, transparent 5px),
+    repeating-linear-gradient(white, white 30px, #ccc 30px, #ccc 31px, white 31px);
+  font-family: Pretendard-Regular;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 150px;
 
   &:focus {
     outline: none;

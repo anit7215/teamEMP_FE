@@ -33,10 +33,10 @@ const NavBar = () => {
         active={location.pathname === "/community"}
       />
       <NavButton
-        to="/reservation"
-        Icon={location.pathname === "/reservation" ? ReservationActive : ReservationIcon}
-        label="진료예약"
-        active={location.pathname === "/reservation"}
+        to="/mypage"
+        Icon={location.pathname === "/mypage" ? ReservationActive : ReservationIcon}
+        label="마이페이지"
+        active={location.pathname === "/mypage"}
       />
       <NavButton
         to="/home"
