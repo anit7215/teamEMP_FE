@@ -23,6 +23,7 @@ import LoginSuccessPage from './pages/Login/LoginSuccessPage';
 import LoginFailPage from './pages/Login/LoginFailPage';
 import NotFound from './pages/Error/ErrorPage';
 import { AuthProvider } from './context/AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const router = createBrowserRouter([
   {
@@ -114,11 +115,15 @@ const router = createBrowserRouter([
   }
 
 ]);
+export const queryClient = new QueryClient();
+
 function App() {
   return (
-  <AuthProvider>
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
+  </QueryClientProvider>
   );
 }
 
