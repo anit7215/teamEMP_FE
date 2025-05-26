@@ -3,8 +3,13 @@ import * as S from './Style';
 import Card from '../../components/common/Card/Card';
 import Button from '../../components/common/Button/Button';
 import { postSignup } from '../../apis/auth';
-
+import { postSignin } from '../../apis/auth';
+import { LOCAL_STORAGE_KEY } from '../../constants/key';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 const SignupPage = () => {
+  const { setItem: setAccessToken } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
+  const { setItem: setRefreshToken } = useLocalStorage(LOCAL_STORAGE_KEY.refreshToken);
+
   const {
     register,
     handleSubmit,
@@ -20,7 +25,11 @@ const SignupPage = () => {
       const response = await postSignup({ email, password });
       console.log(response);
       alert('회원가입 성공!');
-      // window.location.href = '/login';
+      const loginResponse = await postSignin({ email, password });
+    const { accessToken, refreshToken } = loginResponse.data;
+
+    setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
       window.location.href = '/profilesetting';
     } catch (error) {
       console.error('회원가입 실패:', error);
