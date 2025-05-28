@@ -4,7 +4,7 @@ import Button from '../../components/common/Button/Button';
 import AddressSelect from '../../components/Dropdown/AddressSelect';
 import { Title } from '../Statistics/Style';
 import Dropdown from '../../components/Dropdown/Dropdown';
-import GoogleMap from '../../assets/icons/GoogleMap.png';
+import EmergencyGoogleMap from '../../components/GoogleMap/GoogleMapComponent';
 import * as S from './Style';
 
 const EmergencyPage = () => {
@@ -12,8 +12,6 @@ const EmergencyPage = () => {
     const handleAddressChange = (address) => {
         console.log("선택된 주소:", address); //콘솔 출력 확인용
     };
-
-    console.log("이미지 경로 확인:", GoogleMap);
 
     return (
         <><Card>
@@ -36,7 +34,7 @@ const EmergencyPage = () => {
             <S.Content>
                 주변 제세동기 목록
             </S.Content>
-            <S.Img src={GoogleMap} alt="GoogleMap"/>
+            <EmergencyGoogleMap/>
             <EmergencyPageTable />
         </Card>
         </>

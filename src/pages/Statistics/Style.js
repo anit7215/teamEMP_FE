@@ -1,11 +1,18 @@
 import styled from "styled-components";
 
+export const GraphWrapper = styled.div`
+  width: 100%;
+  margin: 16px auto;   // 가운데 정렬
+  padding: 16px;     // 좌우 여백
+`;
+
 export const Card = styled.div`
     display: flex;
+    padding: 16px 16px 16px 15px;
     flex-direction: column;
     justify-content: left;
     align-items: left;
-    gap: 16px;
+    gap: 4px;
     align-self: stretch;
     border-radius: 15px;
     background: linear-gradient(
@@ -43,7 +50,6 @@ export const Content = styled.div`
   font-size: 11px;
   line-height: 14px;
   margin-top: 4px;
-  // margin-bottom: 16px;
 `;
 
 export const CardTitle = styled.div`
@@ -54,6 +60,7 @@ export const CardTitle = styled.div`
   font-weight: 600;
   line-height: normal;
   white-space: nowrap
+
 `;
 
 export const CardContent = styled.div`
