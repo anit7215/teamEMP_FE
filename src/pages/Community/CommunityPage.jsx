@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import Card from '../../components/common/Card/Card';
+
 const CommunityPage = () => {
     return (
         <div>

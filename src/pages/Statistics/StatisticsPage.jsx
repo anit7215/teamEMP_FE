@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {
+  LineChart, Line, XAxis, Tooltip, ResponsiveContainer
+} from "recharts";
 import Card from '../../components/common/Card/Card';
 import Category from '../../components/common/Category/Cateogry';
 import CalendarHeader from '../../components/Calendar/Header';
@@ -8,18 +11,62 @@ import * as S from './Style';
 const StatisticsPage = () => {
     const categories = ["주간", "월간"];
     const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+    const [graphData, setGraphData] = useState([]);
+
+    const sampleDailyData = [ //더미데이터
+    { name: "05/19", value: 90 },
+    { name: "05/20", value: 110 },
+    { name: "05/21", value: 100 },
+    { name: "05/22", value: 130 },
+    { name: "05/23", value: 95 },
+    { name: "05/24", value: 120 },
+    { name: "05/25", value: 105 },
+  ];
+
+  const calculateWeeklyAverages = (dailyData) => {
+    // 일단은 1주만 값 존재
+    const week1 = dailyData.slice(0, 7);
+    const avg = Math.round(
+      week1.reduce((acc, cur) => acc + cur.value, 0) / week1.length
+    );
+
+    return [
+      { name: "1주차", value: avg },
+      { name: "2주차", value: 115 }, // 더미
+      { name: "3주차", value: 125 },
+      { name: "4주차", value: 105 },
+    ];
+  };
+
+  useEffect(() => {
+    if (selectedCategory === "주간") {
+      const formattedData = sampleDailyData.map((d, idx) => ({
+        name: ["05/19", "05/20", "05/21", "05/22", "05/23", "05/24",  "05/25"][idx],
+        value: d.value,
+      }));
+      setGraphData(formattedData);
+    } else if (selectedCategory === "월간") {
+      const weeklyAvgData = calculateWeeklyAverages(sampleDailyData);
+      setGraphData(weeklyAvgData);
+    }
+  }, [selectedCategory]);
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
     };
 
     const getContentForCategory = () =>{
-        switch(selectedCategory){
-            case "주간" :
-                return{};
-            case "월간" :
-                return{};
-        }
+      return (
+        <S.GraphWrapper>
+          <ResponsiveContainer width="100%" height={320}>
+            <LineChart data={graphData} margin={{  right: 30 }}>
+              <XAxis dataKey="name"/>
+              <Tooltip />
+              <Line type="linear" dataKey="value" strokewidth={2} stroke="#42CCC5"/>
+            </LineChart>
+          </ResponsiveContainer>
+        </S.GraphWrapper>
+      );
     };
 
       const today = new Date();
@@ -54,12 +101,7 @@ const StatisticsPage = () => {
                     월간 혈당을 한 눈에 볼 수 있습니다.
                 </S.Content>
             </Card>
-            <Category labels={categories} selectedTab={selectedCategory} onTabClick={handleCategoryChange}/>
-            {selectedCategory === 0 ? (
-                <div>주간그래프</div>
-            ) : (
-                <div>월간그래프</div>
-            )}
+            <Category labels={categories} selectedTab={selectedCategory} onTabClick={setSelectedCategory}/>
             <Card>
                     <CalendarHeader
                       year={year}
@@ -67,15 +109,7 @@ const StatisticsPage = () => {
                       onPrev={handlePrevMonth}
                       onNext={handleNextMonth}
                     />
-            
-                    <CalendarGrid
-                      weeks={weeks}
-                      today={today}
-                      selectedDate={selectedDate}
-                      year={year}
-                      month={month}
-                      onDateClick={handleDateClick}
-                    />
+                    {getContentForCategory()}
                   </Card>
             <S.Card>
                 <S.CardTitle>
