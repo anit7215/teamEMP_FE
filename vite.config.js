@@ -32,4 +32,7 @@ export default defineConfig({
       },
     }),
   ],
+  preview: {
+    port: 5173, // ← 여기 고정
+  },
 })

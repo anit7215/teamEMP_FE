@@ -14,6 +14,7 @@ const DayName = styled.div`
   font-family: Pretendard-SemiBold;
   font-size: 12px;
   margin-top: 8px;
+  margin-bottom: 16px;
 `;
 
 const Day = styled.div`

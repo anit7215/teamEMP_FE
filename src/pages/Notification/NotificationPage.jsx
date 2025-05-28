@@ -1,6 +1,10 @@
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 const NotificationPage = () => {
     return (
-        <div>알림 페이지</div>
+        <div>
+
+            <LoadingSpinner />
+        </div>
     );
 }
 export default NotificationPage;

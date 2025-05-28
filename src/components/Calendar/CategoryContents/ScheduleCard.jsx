@@ -29,10 +29,7 @@ const ScheduleCard = () => {
 
       <S.Title>메모</S.Title>
           <div style={{ marginBottom: '16px'}}>
-          <S.InputField></S.InputField>
-          <S.InputField></S.InputField>
-          <S.InputField></S.InputField>
-          <S.InputField></S.InputField>
+          <S.InputField placeholder="메모를 입력하세요."/>
           </div>
 
       <S.Title>일정공개 여부</S.Title>

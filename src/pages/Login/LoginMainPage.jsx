@@ -9,7 +9,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  height: 100vh; /* 화면 전체 높이 사용 */
+  height: 100vh; 
   padding-left: 46px;
   padding-right: 46px;
   flex-direction: column;
@@ -65,20 +65,28 @@ const Text = styled.div`
   width:fit-content;
   cursor:pointer;
 `;
-
+const handleGoogleLogin = () => {
+    window.location.href = import.meta.env.VITE_SERVER_API_URL + '/oauth2/authorization/google';
+};
+const handleNaverLogin = () => {
+    window.location.href = import.meta.env.VITE_SERVER_API_URL + '/oauth2/authorization/naver';
+};
+const handleKakaoLogin = () => {
+    window.location.href = import.meta.env.VITE_SERVER_API_URL + '/oauth2/authorization/kakao';
+};
 const LoginMain = () => {
   const navigate = useNavigate();
   return (
     <Container>
         <Logo src={logo}/>
         <ButtonContainer>
-          <Button $bgColor="#FDDC3F" $textColor="#3A2929" onClick={()=>{navigate("/login")}}>
+          <Button $bgColor="#FDDC3F" $textColor="#3A2929" onClick={handleKakaoLogin}>
             <ButtonImage src={kakao} alt="Kakao" /> 카카오 로그인
           </Button>
-          <Button $bgColor="#03C75A" $textColor="#ffffff" onClick={()=>{navigate("/login")}}>
+          <Button $bgColor="#03C75A" $textColor="#ffffff" onClick={handleNaverLogin}>
             <ButtonImage src={naver} alt="Naver" /> 네이버 로그인
           </Button>
-          <Button style={{ border: "1px solid #747775"}} onClick={()=>{navigate("/login")}}>
+          <Button style={{ border: "1px solid #747775"}} onClick={handleGoogleLogin}>
             <ButtonImage src={google} alt="Google"/> 구글 로그인
           </Button>
           <Button style={{ border: "1px solid #747775"}} onClick={()=>{navigate("/login")}}>

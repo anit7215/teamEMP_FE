@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Card from '../../components/common/Card/Card';
 import Category from '../../components/common/Category/Cateogry';
 import CalendarHeader from '../../components/Calendar/Header';
-import CalendarGrid from '../../components/Calendar/Calendar';
+import GraphImage from '../../assets/icons/graph.png';
 import * as S from './Style';
 
 const StatisticsPage = () => {
@@ -11,15 +11,6 @@ const StatisticsPage = () => {
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
-    };
-
-    const getContentForCategory = () =>{
-        switch(selectedCategory){
-            case "주간" :
-                return{};
-            case "월간" :
-                return{};
-        }
     };
 
       const today = new Date();
@@ -55,28 +46,19 @@ const StatisticsPage = () => {
                 </S.Content>
             </Card>
             <Category labels={categories} selectedTab={selectedCategory} onTabClick={handleCategoryChange}/>
-            {selectedCategory === 0 ? (
-                <div>주간그래프</div>
-            ) : (
-                <div>월간그래프</div>
-            )}
-            <Card>
+            <S.Wrapper>
+              <Card>
                     <CalendarHeader
                       year={year}
                       month={month}
                       onPrev={handlePrevMonth}
                       onNext={handleNextMonth}
                     />
+                    <S.GraphImage src={GraphImage} alt="Graph" />
+                  
+            </Card>
+            </S.Wrapper>
             
-                    <CalendarGrid
-                      weeks={weeks}
-                      today={today}
-                      selectedDate={selectedDate}
-                      year={year}
-                      month={month}
-                      onDateClick={handleDateClick}
-                    />
-                  </Card>
             <S.Card>
                 <S.CardTitle>
                     혈당 통계요약

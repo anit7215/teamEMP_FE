@@ -16,6 +16,15 @@ import NotificationPage from './pages/Notification/NotificationPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
 import MainLayout from './layout/MainLayout';
 import LoginLayout from './layout/LoginLayout';
+import KakaoLoginRedirectPage from './pages/Login/KakaoLoginRedirectPage';
+import NaverLoginRedirectPage from './pages/Login/NaverLoginRedirectPage';
+import GoogleLoginRedirectPage from './pages/Login/GoogleLoginRedirectPage';
+import LoginSuccessPage from './pages/Login/LoginSuccessPage';
+import LoginFailPage from './pages/Login/LoginFailPage';
+import NotFound from './pages/Error/ErrorPage';
+import { AuthProvider } from './context/AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -23,7 +32,7 @@ const router = createBrowserRouter([
   },
   {
       element: <MainLayout/>,
-      // errorElement: <NotFound/>,
+      errorElement: <NotFound/>,
       children: [
           {
             path:'home',
@@ -71,7 +80,27 @@ const router = createBrowserRouter([
             element: <SignUpPage/>
           },
           {
-            path:'profileSetting',
+            path: 'login-success/kakao',
+            element: <KakaoLoginRedirectPage />,
+          },
+          {
+            path: 'login-success/naver',
+            element: <NaverLoginRedirectPage />,
+          },
+          {
+            path: 'login-success/google',
+            element: <GoogleLoginRedirectPage />,
+          },
+          {
+            path: 'login-success',
+            element: <LoginSuccessPage />,
+          },
+          {
+            path: 'login-failed',
+            element: <LoginFailPage />,
+          },
+          {
+            path:'profilesetting',
             element:<ProfileSettingPage/>,
           },
           {
@@ -80,10 +109,22 @@ const router = createBrowserRouter([
           },
       ]
   },
+  {
+    path: '*',
+    element: <NotFound />
+  }
 
-])
+]);
+export const queryClient = new QueryClient();
+
 function App() {
-  return <RouterProvider router={router}/>
+  return (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  </QueryClientProvider>
+  );
 }
 
 export default App;

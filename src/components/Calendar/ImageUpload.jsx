@@ -3,6 +3,7 @@ import Button from '../common/Button/Button';
 
 const ImageUpload = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = React.useRef();
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
@@ -16,16 +17,16 @@ const ImageUpload = () => {
 
   return (
     <div>
-      <label htmlFor="image-upload">
-        <Button text="이미지 업로드하기" />
-      </label>
+      <Button
+        text="이미지 업로드하기"
+        onClick={() => fileInputRef.current?.click()}
+      />
       <input
-        id="image-upload"
+        ref={fileInputRef}
         type="file"
         accept="image/*"
         style={{ display: 'none' }}
-        onChange={handleImageUpload}
-      />
+        onChange={handleImageUpload}/>
 
       {selectedImage && (
       <div

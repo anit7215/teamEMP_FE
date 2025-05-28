@@ -5,6 +5,8 @@ import CalendarHeader from '../../components/Calendar/Header';
 import CalendarGrid from '../../components/Calendar/Calendar';
 import { getMonthData } from '../../utils/calendar';
 import SelectedDateModal from '../../components/Calendar/SelectedDateModal';
+import { getCalendarEventsByDate } from '../../apis/auth';
+
 
 const CalendarContainer = styled.div`
   margin-bottom: 100px;
@@ -28,19 +30,21 @@ const Content = styled.p`
 function CalendarPage() {
   const today = new Date();
   // 일정 임시 데이터
-  const events = {
-  '2025-05-16': ['진료', '약 복용'],
-  '2025-05-18': ['치과 예약'],
-  '2025-06-20': ['약 복용', '진료'],
-  }; 
+  // const events = {
+  // '2025-05-16': ['진료', '약 복용'],
+  // '2025-05-18': ['치과 예약'],
+  // '2025-06-20': ['약 복용', '진료'],
+  // }; 
   const categories = ["복약관리", "진료관리", "진료일정"];
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [events, setEvents] = useState({});
   
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+  setSelectedCategory(prev => (prev === category ? null : category));
   };
+
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const weeks = getMonthData(year, month);
@@ -55,9 +59,24 @@ function CalendarPage() {
     setSelectedDate(null);
   };
 
-  const handleDateClick = (day) => {
-    if (day) setSelectedDate(new Date(year, month, day));
-  };
+  const handleDateClick = async (day) => {
+  if (!day) return;
+
+  const clickedDate = new Date(year, month, day);
+  setSelectedDate(clickedDate);
+
+  try {
+    const dateStr = clickedDate.toISOString(); // ISO 문자열
+    const eventData = await getCalendarEventsByDate(dateStr);
+
+    // 예: { '2025-05-07': ['진료', '약 복용'] } 형태로 저장
+    const key = dateStr.slice(0, 10);
+    setEvents(prev => ({ ...prev, [key]: eventData.events || [] }));
+  } catch (error) {
+    console.error('일정 조회 실패:', error);
+  }
+};
+
   return (
     <CalendarContainer>
       <Card>
