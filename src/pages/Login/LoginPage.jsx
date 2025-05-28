@@ -2,8 +2,10 @@ import { useForm } from 'react-hook-form';
 import * as S from './Style';
 import Card from '../../components/common/Card/Card';
 import Button from '../../components/common/Button/Button';
+import { useAuth } from '../../context/AuthContext';
 
 const LoginPage = () => {
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -13,9 +15,15 @@ const LoginPage = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = (data) => {
-    console.log('로그인 데이터:', data);
-  };
+  // const onSubmit = async (data) => {
+  //   // console.log('로그인 데이터:', data);
+  //   // try {
+  //   //   await login(data);
+  //   // } catch (error) {
+  //   //   console.error('로그인 실패:', error);
+  //   // }
+    
+  // };
 
   const values = watch();
   const password = values.password || "";
@@ -26,7 +34,8 @@ const LoginPage = () => {
     password.length < 8;
 
   return (
-    <S.Container onSubmit={handleSubmit(onSubmit)} as="form">
+    <S.Container as="form">
+     {/* <S.Container onSubmit={handleSubmit(onSubmit)} as="form"> */}
       <Card>
         <S.Title>로그인</S.Title>
 
@@ -54,7 +63,7 @@ const LoginPage = () => {
         />
         {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
 
-        <Button type="submit" text="로그인 하기" to="/home" disabled={isDisabled} />
+        <Button type="submit" text="로그인 하기" disabled={isDisabled} to="/home"/>
       </Card>
     </S.Container>
   );

@@ -1,14 +1,12 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import Header from '../components/common/Header/LogoHeader';
-import NavBar from '../components/common/NavBar/NavBar';
 import styled from 'styled-components';
 const MainLayout = () => {
     return(
         <LayoutContainer>
             <Header/>
             <Outlet/>
-            {/* <NavBar/> */}
         </LayoutContainer>
     );
 };

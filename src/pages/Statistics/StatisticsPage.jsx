@@ -5,7 +5,7 @@ import {
 import Card from '../../components/common/Card/Card';
 import Category from '../../components/common/Category/Cateogry';
 import CalendarHeader from '../../components/Calendar/Header';
-import CalendarGrid from '../../components/Calendar/Calendar';
+import GraphImage from '../../assets/icons/graph.png';
 import * as S from './Style';
 
 const StatisticsPage = () => {
@@ -103,6 +103,7 @@ const StatisticsPage = () => {
             </Card>
             <Category labels={categories} selectedTab={selectedCategory} onTabClick={setSelectedCategory}/>
             <Card>
+
                     <CalendarHeader
                       year={year}
                       month={month}
@@ -111,6 +112,7 @@ const StatisticsPage = () => {
                     />
                     {getContentForCategory()}
                   </Card>
+
             <S.Card>
                 <S.CardTitle>
                     혈당 통계요약

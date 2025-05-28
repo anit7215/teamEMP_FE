@@ -11,21 +11,12 @@ const TreatmentCard = () => {
   return (
     <>
       <S.Content>진료 결과를 입력할 수 있습니다.</S.Content>
-      <div style={{ display: 'flex', gap: '16px', margin: '16px 0'}}>
-        <S.Wrapper>
+      <div style={{ display: 'flex', margin: '16px 0', flexWrap: 'wrap'}}>
             <S.Text>
                 <S.Title>병명</S.Title>
                 <S.AddText>필수, 최대 10자</S.AddText>
             </S.Text>
             <Input  label="병명" placeholder="병명을 입력하세요." />
-        </S.Wrapper>
-        <S.Wrapper>
-            <S.Text>
-                <S.Title>특이사항</S.Title>
-                <S.AddText>선택, 최대 10자</S.AddText>
-            </S.Text>
-            <Input label="특이사항" placeholder="특이사항을 입력하세요." />
-        </S.Wrapper>
       </div>
       
       <S.Title>진료결과 이미지 업로드하기</S.Title>
@@ -34,10 +25,7 @@ const TreatmentCard = () => {
       </div>
     <S.Title>메모</S.Title>
     <div style={{ marginBottom: '16px'}}>
-    <S.InputField></S.InputField>
-    <S.InputField></S.InputField>
-    <S.InputField></S.InputField>
-    <S.InputField></S.InputField>
+    <S.InputField placeholder='메모를 입력하세요.'/>
     </div>
     
 

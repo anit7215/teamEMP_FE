@@ -26,6 +26,7 @@ export const Card = styled.div`
     font-family: Pretendard-SemiBold;
     font-size: 15px;
     margin-bottom:8px;
+    padding: 16px 16px 16px 15px;
 `;
 
 export const Container = styled.div`
@@ -65,8 +66,21 @@ export const CardTitle = styled.div`
 export const CardContent = styled.div`
   color: #ffffff;
   font-family: "Pretendard-Regular";
-  font-size: 11px;
+  font-size: 12px;
   line-height: 14px;
   margin-top: 4px;
   margin-bottom: 16px;
+`;
+export const GraphImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  margin-top: 16px;
 `;
