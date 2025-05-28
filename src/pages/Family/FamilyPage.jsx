@@ -7,6 +7,8 @@ import PriorityListIcon from '../../assets/icons/priorityList.svg';
 import MinusIcon from '../../assets/icons/Minus.svg';
 import useCreateFamily from '../../hooks/mutations/useCreateFamily';
 import useGetFamily from '../../hooks/queries/useGetFamily';
+import MaleIcon from '../../assets/icons/Male.svg';
+import FemaleIcon from '../../assets/icons/Female.svg';
 import * as S from './Style';
 
 const FamilyPage = () => {
@@ -77,7 +79,9 @@ const FamilyPage = () => {
             </S.NameWrapper>
             {familyCode ? (<S.FamilyCode>가족코드 : {familyCode}</S.FamilyCode>):(<S.FamilyCode> </S.FamilyCode>)}
             <S.TagContainer>
-              <Tag text={familyHead.gender} />
+              {familyHead.gender === 'Female' ? (
+                <S.GenderIcon src={FemaleIcon}/>) : (
+                <S.GenderIcon src={MaleIcon}/>)}
               <Tag text={`${familyHead.age}세`} disabled />
             </S.TagContainer>
           </S.InfoContainer>

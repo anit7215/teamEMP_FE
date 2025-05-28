@@ -110,6 +110,7 @@ export const TagContainer = styled.div`
   height: 30px;
   flex-wrap: nowrap;
   white-space: nowrap;
+  align-items: center;
 `;
 
 export const Master = styled.img`
@@ -150,4 +151,9 @@ export const FamilyTitle = styled.div`
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
+`;
+
+export const GenderIcon = styled.img`
+  width: 16px;
+  height: 16px;
 `;
