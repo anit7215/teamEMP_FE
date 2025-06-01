@@ -147,3 +147,6 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+:root {
+  --nav-height: 82px; /**/
+}

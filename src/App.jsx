@@ -9,6 +9,7 @@ import MyPage from './pages/MyPage/MyPage';
 import FamilyPage from './pages/Family/FamilyPage';
 import CalendarPage from './pages/Calendar/CalendarPage';
 import CommunityPage from './pages/Community/CommunityPage';
+import CommunityPostPage from './pages/Community/CommunityPostPage';
 import EmergencyPage from './pages/Emergency/EmergencyPage';
 import ReservationPage from './pages/Reservation/ReservationPage';
 import StatisticsPage from './pages/Statistics/StatisticsPage';
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
           {
             path:'community',
             element:<CommunityPage/>,
+          },
+           {
+            path: 'community/post',
+            element: <CommunityPostPage />,
           },
           {
             path:'reservation',
