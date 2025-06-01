@@ -15,15 +15,15 @@ const LoginPage = () => {
     mode: 'onChange',
   });
 
-  // const onSubmit = async (data) => {
-  //   // console.log('로그인 데이터:', data);
-  //   // try {
-  //   //   await login(data);
-  //   // } catch (error) {
-  //   //   console.error('로그인 실패:', error);
-  //   // }
+  const onSubmit = async (data) => {
+    console.log('로그인 데이터:', data);
+    try {
+      await login(data);
+    } catch (error) {
+      console.error('로그인 실패:', error);
+    }
     
-  // };
+  };
 
   const values = watch();
   const password = values.password || "";
@@ -34,8 +34,7 @@ const LoginPage = () => {
     password.length < 8;
 
   return (
-    <S.Container as="form">
-     {/* <S.Container onSubmit={handleSubmit(onSubmit)} as="form"> */}
+     <S.Container onSubmit={handleSubmit(onSubmit)} as="form">
       <Card>
         <S.Title>로그인</S.Title>
 

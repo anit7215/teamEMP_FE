@@ -6,14 +6,43 @@ import Button from '../../components/common/Button/Button'
 import defaultImage from '../../assets/icons/defaultProfile.svg';
 import AddButton from '../../assets/icons/addButton.svg';
 import * as S from './Style';
+import useGetMyHealthTag from '../../hooks/queries/useGetMyHealthTag';
+import useAddHealthTag from '../../hooks/mutations/useAddHealthTag';
+import useDeleteHealthTag from '../../hooks/mutations/useDeleteHealthTag';
 
 const MyPage = () => {
     const [isPublic, setIsPublic] = useState("");
-    const [keywordForms, setKeywordForms] = useState([{ id: Date.now() }]); 
+    const [keywordForms, setKeywordForms] = useState([{ id: Date.now(), isPublic: "", content: "" }]);
 
+    const { data, isLoading, isError, refetch,error } = useGetMyHealthTag();
+    const { mutate: addHealthTag } = useAddHealthTag({
+    onSuccess: () => refetch(),  });
+    const { mutate: deleteHealthTag } = useDeleteHealthTag({
+    onSuccess: () => refetch(),  });
+    
     const handleAddKeyword = () => {
         setKeywordForms(prev => [...prev, { id: Date.now() }]);
     };
+    const handlePublicChange = (id, value) => {
+        setKeywordForms(prev =>
+            prev.map(form =>
+            form.id === id ? { ...form, isPublic: value } : form
+            )
+        );
+    };
+    const handleSubmit = () => {
+  const validTags = keywordForms.filter(form => form.content && form.isPublic);
+  const payload = validTags.map(form => ({
+    content: form.content,
+    isPublic: form.isPublic === "공개"
+  }));
+
+  if (payload.length > 0) {
+    addHealthTag(payload);
+  }
+};
+
+
     return (
         <S.Container>
             <Card>
@@ -27,15 +56,40 @@ const MyPage = () => {
                     <S.InfoContainer>
                         <S.Name>현재 공개 키워드</S.Name>
                         <S.TagContainer>
-                            <Tag text={"체중조절"} />
-                            <Tag text={"철분부족"} />
-                            <Tag text={"28세"} disabled={true} />
+                            {(data?.data?.length > 0 ? data.data : [
+    { id: 1, content: '테스트 태그1' },
+    { id: 2, content: '테스트 태그2' }
+  ]).map(tag => (
+    <Tag
+      key={tag.id}
+      text={tag.content}
+      onDelete={() => deleteHealthTag(tag.id)}
+    />
+  ))}
+                        {data?.data?.map((tag) => (
+                            <Tag
+                            key={tag.id}
+                            text={tag.content}
+                            onDelete={() => deleteHealthTag(tag.id)}
+                            />
+                        ))}
                         </S.TagContainer>
+
                     </S.InfoContainer>
                 </S.Wrapper>
             </Card>
             <Card>
                 <S.Title>비공개 키워드</S.Title>
+                <S.TagContainer>
+                        {data?.data?.map((tag) => (
+                            <Tag
+                            key={tag.id}
+                            text={tag.content}
+                            onDelete={() => deleteHealthTag(tag.id)}
+                            disabled={true}
+                            />
+                        ))}
+                </S.TagContainer>
             </Card>
             <Card>
                 <S.Title>나의 건강 키워드 등록하기</S.Title>
@@ -47,21 +101,27 @@ const MyPage = () => {
                                 <S.Title>새 건강 키워드</S.Title>
                                 <S.AddText>최대 4자</S.AddText>
                             </S.Name>
-                            <Input />
+                            <Input value={form.content}      onChange={(e) =>
+          setKeywordForms(prev =>
+            prev.map(f =>
+              f.id === form.id ? { ...f, content: e.target.value } : f
+            )
+          )
+        }/>
                         </S.NameWrapper>
 
                         <S.GenderBlock>
                             <S.Name>가족 공개여부</S.Name>
                             <S.GenderButtonGroup>
                                 <S.GenderButton
-                                    selected={isPublic === "공개"}
-                                    onClick={() => setIsPublic("공개")}
+                                    selected={form.isPublic === "공개"}
+                                    onClick={() => handlePublicChange(form.id, "공개")}
                                 >
                                     공개
                                 </S.GenderButton>
                                 <S.GenderButton
-                                    selected={isPublic === "비공개"}
-                                    onClick={() => setIsPublic("비공개")}
+                                    selected={form.isPublic === "비공개"}
+                                    onClick={() => handlePublicChange(form.id, "비공개")}
                                 >
                                     비공개
                                 </S.GenderButton>
@@ -70,10 +130,12 @@ const MyPage = () => {
                     </S.NameAndGenderWrapper>
                 ))}
                 <S.AddButton src={AddButton} onClick={handleAddKeyword}/>
-                <Button text="키워드 등록하기"/>
+                <Button text="키워드 등록하기" onClick={handleSubmit}/>
             </Card>
             
-            
+            <Card>
+                <S.Title>내가 쓴 글 모아보기</S.Title>
+            </Card>
         </S.Container>
     );
 };
