@@ -1,18 +1,24 @@
-import { useMutation,useQueryClient } from '@tanstack/react-query';
-import { postFamily } from '../../apis/family';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { exitFamily } from '../../apis/family';
 
-const useCreateFamily = () => {
+const useExitFamily = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: postFamily,
-    onSuccess: (data) => {
-      if (data.code === 'GEN-000') {
-        alert('가족이 생성되었습니다!');
-        queryClient.invalidateQueries({ queryKey: ['getFamily'] });
+    mutationFn: exitFamily,
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['getFamily'] });
+      const previousFamily = queryClient.getQueryData(['getFamily']);
+      queryClient.setQueryData(['getFamily'], (oldData) => ({
+        ...oldData,
+        familyCode: null,
+        familyHead: null,
+        familyMembers: [],
+      }));
 
-      }
+      return { previousFamily };
     },
+    
     onError: (error) => {
       const code = error.response?.data?.code;
 
@@ -36,6 +42,11 @@ const useCreateFamily = () => {
           alert('알 수 없는 오류가 발생했습니다.');
       }
     },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['getFamily'] });
+    },
   });
 };
-export default useCreateFamily;
+
+export default useExitFamily;

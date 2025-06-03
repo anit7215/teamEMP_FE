@@ -1,14 +1,14 @@
 import { useMutation,useQueryClient } from '@tanstack/react-query';
-import { postFamily } from '../../apis/family';
+import { joinFamily } from '../../apis/family';
 
 const useCreateFamily = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: postFamily,
+    mutationFn: joinFamily,
     onSuccess: (data) => {
       if (data.code === 'GEN-000') {
-        alert('가족이 생성되었습니다!');
+        alert('가족에 가입되었습니다!');
         queryClient.invalidateQueries({ queryKey: ['getFamily'] });
 
       }

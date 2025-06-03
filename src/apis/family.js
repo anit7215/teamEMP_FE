@@ -5,8 +5,8 @@ export const postFamily = async ({ name }) => {
   return data;
 };
 
-export const joinFamily = async (code) => {
-  const { data } = await axiosInstance.post("/api/auth/user/family/join", {code});
+export const joinFamily = async (familyCode) => {
+  const { data } = await axiosInstance.post("/api/auth/user/family/join", {familyCode});
   return data;
 }
 

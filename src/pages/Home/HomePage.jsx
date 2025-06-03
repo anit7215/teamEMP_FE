@@ -5,11 +5,19 @@ import Category from '../../components/common/Category/Cateogry';
 import Button from '../../components/common/Button/Button';
 import Input from '../../components/common/Input/Input';
 import defaultImage from '../../assets/icons/defaultProfile.svg';
+import useGetMyInfo from '../../hooks/queries/useGetMyInfo';
+// import useGetMyHealthTag from '../../hooks/queries/useGetMyHealthTag';
+import useAddHealthValue from '../../hooks/mutations/useAddHealthValue';
+
 import * as S from './Style';
 
 const HomePage = () => {
+    const [inputValue, setInputValue] = useState('');
+    const { mutate: addHealthValueMutate } = useAddHealthValue();
     const categories = ["혈당", "혈압", "체중", "수면"];
     const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+
+    const { data: myInfo } = useGetMyInfo();
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
@@ -53,6 +61,39 @@ const HomePage = () => {
                 return {};
         }
     };
+    const handleSubmit = () => {
+        const typeMap = {
+            "혈당": "BLOOD_SUGAR",
+            "혈압": "BLOOD_PRESSURE",
+            "체중": "WEIGHT",
+            "수면": "SLEEP_TIME",
+        };
+
+        const type = typeMap[selectedCategory];
+
+        if (!type || inputValue.trim() === '') {
+            alert("값을 입력해주세요.");
+            return;
+        }
+
+        addHealthValueMutate(
+            {
+                type,
+                value: parseFloat(inputValue)
+            },
+            {
+                onSuccess: (data) => {
+                    if (data.code === 'GEN-000') {
+                        alert(`${typeMap} 정보가 기록되었습니다!`);
+                        navigate('/statistics'); 
+                    }
+                }
+            }
+        );
+
+        setInputValue('');
+    };
+
 
     const { title, content, subtitle, inputPlaceholder, unit } = getContentForCategory();
 
@@ -66,13 +107,13 @@ const HomePage = () => {
                     <S.ProfileImage src={defaultImage} />
                     <S.MeIcon>나</S.MeIcon>
                     <S.InfoContainer>
-                        <S.Name>홍길동</S.Name>
-                        <S.FamilyCode>가족코드 : 123456</S.FamilyCode>
+                        <S.Name>{myInfo?.name||'홍길동'}</S.Name>
                         <S.TagContainer>
-                            <Tag text={"체중조절"} />
-                            <Tag text={"철분부족"} />
-                            <Tag text={"28세"} disabled={true} />
+                            {myInfo?.healthTags?.slice().sort((a, b) => Number(b.public) - Number(a.public)).map((tag) => (
+                                <Tag key={tag.id} text={tag.content} disabled={!tag.public} />
+                            ))}
                         </S.TagContainer>
+
                     </S.InfoContainer>
                 </S.Wrapper>
             </Card>
@@ -90,10 +131,11 @@ const HomePage = () => {
                 <S.Content>{content}</S.Content>
                 <S.Title>{subtitle}</S.Title>
                 <S.InputWrapper>
-                    <Input placeholder={inputPlaceholder} />
+                    <Input placeholder={inputPlaceholder} value={inputValue}
+  onChange = {(e) => setInputValue(e.target.value)}/>
                     <S.Title>{unit}</S.Title>
                 </S.InputWrapper>
-                <Button text={`등록 후 ${selectedCategory} 통계 보러가기`} to="/statistics" />
+                <Button text={`등록 후 ${selectedCategory} 통계 보러가기`} onClick={handleSubmit} />
             </Card>
         </S.Container>
     );

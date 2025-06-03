@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const TagContainer = styled.div`
+    position: relative; 
     display: flex;
     padding: 8px;
     justify-content: center;
@@ -12,4 +13,13 @@ export const TagContainer = styled.div`
     font-family: 'Pretendard-Regular';
     font-size: 12px;
     line-height: normal;
+`;
+
+export const DeleteButton = styled.img`
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 `;

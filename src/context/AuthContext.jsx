@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { LOCAL_STORAGE_KEY } from '../constants/key';
-import { postSignin } from '../apis/auth';
+import { postSignin, postExchangeToken } from '../apis/auth';
 
 export const AuthContext = createContext({
   accessToken: null,
@@ -19,32 +19,54 @@ export const AuthProvider = ({ children }) => {
   const [refreshToken, setRefreshToken] = useState(getRefreshTokenFromStorage());
 
   const login = async (signinData) => {
-    try {
-      const { data } = await postSignin(signinData);
+  try {
+    const loginResponse = await postSignin(signinData);
+    const code = loginResponse.data?.code;
 
-      if (data) {
-        const newAccessToken = data.accessToken;
-        const newRefreshToken = data.refreshToken;
-
-        setAccessTokenInStorage(newAccessToken);
-        setRefreshTokenInStorage(newRefreshToken);
-
-        setAccessToken(newAccessToken);
-        setRefreshToken(newRefreshToken);
-
-        alert('로그인 성공');
-        window.location.href = '/home';
-      }
-    } catch (error) {
-      console.error('로그인 오류:', error);
-      alert('로그인 실패');
+    if (!code) {
+      alert('로그인 실패: code가 없습니다.');
+      return;
     }
+
+    const tokenResponse = await postExchangeToken(code);
+
+    const newRefreshToken = tokenResponse.data?.refreshToken;
+    const newAccessToken = tokenResponse.data?.accessToken;
+    const userRole = tokenResponse.data?.role;
+
+    if (!newAccessToken || !newRefreshToken) {
+      alert('토큰 발급 실패');
+      return;
+    }
+
+    setAccessTokenInStorage(newAccessToken);
+    setRefreshTokenInStorage(newRefreshToken);
+    setAccessToken(newAccessToken);
+    setRefreshToken(newRefreshToken);
+
+    if (userRole === 'ROLE_SEMI_USER') {
+      alert('프로필 설정이 필요합니다!');
+      window.location.href = '/profilesetting';
+    } else {
+      alert('로그인 성공');
+      window.location.href = '/home';
+    }
+  } catch (error) {
+    console.error('로그인 오류:', error);
+    alert('로그인 실패');
+  }
+};
+  const logout = () => {
+    removeAccessTokenFromStorage();
+    removeRefreshTokenFromStorage();
+    setAccessToken(null);
+    setRefreshToken(null);
+    alert('로그아웃 되었습니다.');
+    window.location.href = '/';
   };
 
-  ;
-
   return (
-    <AuthContext.Provider value={{ accessToken, refreshToken, login }}>
+    <AuthContext.Provider value={{ accessToken, refreshToken, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

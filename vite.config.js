@@ -35,4 +35,13 @@ export default defineConfig({
   preview: {
     port: 5173, // ← 여기 고정
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://13.125.199.82:8080',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '')
+      }
+    }
+  },
 })
