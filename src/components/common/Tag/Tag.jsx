@@ -5,7 +5,7 @@ const Tag = ({ text, disabled=false, onDelete }) => {
     return (
         <TagContainer disabled={disabled}>
             {text} 
-            {!disabled && onDelete && <DeleteButton src={DeleteIcon} onClick={onDelete} />}
+            {onDelete && <DeleteButton src={DeleteIcon} onClick={onDelete} />}
         </TagContainer>
     );
 };

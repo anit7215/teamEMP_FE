@@ -30,7 +30,7 @@ const SignupPage = () => {
 
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
-      window.location.href = '/profilesetting';
+      window.location.href = '/';
     } catch (error) {
       console.error('회원가입 실패:', error);
       if (error.response && error.response.data.code === 'AUTH-004') {
@@ -93,7 +93,7 @@ const SignupPage = () => {
         />
         {errors.passwordCheck && <S.ErrorMessage>{errors.passwordCheck.message}</S.ErrorMessage>}
 
-        <Button type="submit" text="프로필 입력하러 가기" disabled={isDisabled} />
+        <Button type="submit" text="회원가입 완료하기" disabled={isDisabled} />
       </Card>
     </S.Container>
   );

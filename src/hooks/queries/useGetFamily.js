@@ -6,7 +6,6 @@ const useGetFamily = () => {
     queryKey: ['family'],
     queryFn: getFamily,
     retry: false, 
-    select: (data) => data.data, 
   });
 };
 

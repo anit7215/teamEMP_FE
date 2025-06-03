@@ -4,12 +4,11 @@ import Tag from '../../components/common/Tag/Tag';
 import Master from '../../assets/icons/Crown.svg';
 import defaultImage from '../../assets/icons/defaultProfile.svg';
 import PriorityListIcon from '../../assets/icons/priorityList.svg';
-import MinusIcon from '../../assets/icons/Minus.svg';
 import useCreateFamily from '../../hooks/mutations/useCreateFamily';
 import useDeleteFamily from '../../hooks/mutations/useDeleteFamily';
 import useJoinFamily from '../../hooks/mutations/useJoinFamily';
 import useGetFamily from '../../hooks/queries/useGetFamily';
-import useExitFamily from '../../hooks/mutations/useExitFamily'; 
+import useExitFamily from '../../hooks/mutations/useExitFamily';
 import MaleIcon from '../../assets/icons/Male.svg';
 import FemaleIcon from '../../assets/icons/Female.svg';
 import JoinFamilyModal from '../../components/common/Modal/JoinFamilyModal';
@@ -23,9 +22,9 @@ const FamilyPage = () => {
   const [joinCode, setJoinCode] = useState('');
 
   const { data, isLoading, isError, refetch, error } = useGetFamily();
-  const { mutate: createFamily } = useCreateFamily({ onSuccess: () => refetch(), });
-  const { mutate: deleteFamily } = useDeleteFamily({  onSuccess: () => refetch(), });
-  const { mutate: exitFamily } = useExitFamily({  onSuccess: () => refetch(), });
+  const { mutate: createFamily } = useCreateFamily();
+  const { mutate: deleteFamily } = useDeleteFamily({ onSuccess: () => refetch() });
+  const { mutate: exitFamily } = useExitFamily();
   const { mutate: joinFamily, isLoading: isJoining } = useJoinFamily({
     onSuccess: () => {
       setJoinModalOpen(false);
@@ -34,56 +33,32 @@ const FamilyPage = () => {
     },
   });
 
-  const tempFamilyCode = 'TEMP1234';
-  const tempFamilyHead = {
-    name: '홍길동',
-    age: 3,
-    gender: 'Female',
-  };
-  const tempFamilyMembers = [
-  { id: 0, name: '홍길순', gender: 'Female', tags: ['건강', '32세'] },
-  { id: 1, name: '홍길자', gender: 'Female', tags: ['알레르기', '28세'] },
-  { id: 2, name: '홍길돌', gender: 'Male', tags: ['35세'] },
-];
-
-
   const familyInfo = data?.data;
+  const familyCode = familyInfo?.familyCode;
+  const familyHead = familyInfo?.familyHead;
 
   useEffect(() => {
     if (familyInfo?.familyMembers) {
-      const list = familyInfo.familyMembers.map((member, i) => ({
-        id: i,
-        name: member.name,
-        tags: [
-          ...(member.healthState || []),
-          `${member.age}세`,
-          member.gender,
-        ],
-      }));
+      const list = familyInfo.familyMembers.map((member, i) => {
+        const healthTags = member.healthState ?? [];
+        const genderText = member.gender?.toLowerCase() === 'female' ? 'Female' : 'Male';
+        return {
+          id: i,
+          name: member.name,
+          gender: genderText,
+          tags: [...healthTags, `${member.age}세`, genderText],
+        };
+      });
       setFamilyList(list);
-    } else {
-      setFamilyList(tempFamilyMembers); // 임시 데이터
     }
   }, [familyInfo]);
 
-  const familyCode = familyInfo?.familyCode || tempFamilyCode;
-  const familyHead = familyInfo?.familyHead|| tempFamilyHead;
-
-  const handleAddFamily = () => {
-    createFamily({ name: '우리 가족' });
-  };
-
-  const handleDeleteFamily = () => {
-    deleteFamily();
-  };
-  const handleExitFamily = () => {
-    exitFamily();
-  };
+  const handleAddFamily = () => createFamily({ name: '우리 가족' });
+  const handleDeleteFamily = () => deleteFamily();
+  const handleExitFamily = () => exitFamily();
 
   const handleDragStart = (index) => setDraggedIndex(index);
-
   const handleDragOver = (e) => e.preventDefault();
-
   const handleDrop = (index) => {
     if (draggedIndex === null || draggedIndex === index) return;
     const updatedList = [...familyList];
@@ -105,24 +80,25 @@ const FamilyPage = () => {
       alert('가족 코드를 입력해주세요.');
       return;
     }
-    joinFamily({ familyCode: joinCode });
+    joinFamily(joinCode);
   };
 
   if (isLoading) return <LoadingSpinner />;
-  
   if (isError) {
     if (error?.response?.data?.code === 'FAM-002') {
       return (
         <S.Container>
-          <Card><S.Title>아직 가족이 없습니다!</S.Title>
-          <S.AddButton onClick={handleAddFamily}>가족장이 되어 가족 생성하기</S.AddButton>
-          <S.AddButton onClick={openJoinModal}>가족코드로 참여하기</S.AddButton>
+          <Card>
+            <div style={{display:'flex', alignItems:'center',textAlign:'center'}}>아직 가족이 없습니다!</div>
+            <S.AddButton onClick={handleAddFamily}>가족장이 되어 가족 생성하기</S.AddButton>
+            <S.AddButton onClick={openJoinModal}>가족코드로 참여하기</S.AddButton>
           </Card>
-          
           <JoinFamilyModal
             isOpen={joinModalOpen}
             onClose={closeJoinModal}
             onJoin={handleJoinFamily}
+            joinCode={joinCode}
+            setJoinCode={setJoinCode}
             isJoining={isJoining}
           />
         </S.Container>
@@ -147,87 +123,97 @@ const FamilyPage = () => {
         </S.Content>
       </Card>
 
-      {familyCode && familyHead ? (
-        <>
-          <Card>
-            <S.FamilyTitle>가족장</S.FamilyTitle>
-            <S.Wrapper>
-              <S.ProfileImage src={defaultImage} />
-              <S.MeIcon>나</S.MeIcon>
-              <S.InfoContainer>
-                <S.NameWrapper>
-                  <S.Name>{familyHead.name}</S.Name>
-                  <S.Master src={Master} />
-                </S.NameWrapper>
-                <S.FamilyCode>가족코드 : {familyCode}</S.FamilyCode>
-                <S.TagContainer>
-                  {familyHead.gender === 'Female' ? (
-                    <S.GenderIcon src={FemaleIcon} />
-                  ) : (
-                    <S.GenderIcon src={MaleIcon} />
-                  )}
-                  <Tag text={`${familyHead.age}세`} disabled />
-                </S.TagContainer>
-              </S.InfoContainer>
-            </S.Wrapper>
-          </Card>
+      <Card>
+        <S.FamilyTitle>가족장</S.FamilyTitle>
+        <S.Wrapper>
+          <S.ProfileImage src={defaultImage} />
+          <S.MeIcon>나</S.MeIcon>
+          <S.InfoContainer>
+            <S.NameWrapper>
+              <S.Name>{familyHead.name}</S.Name>
+              <S.Master src={Master} />
+            </S.NameWrapper>
+            <S.FamilyCode>가족코드 : {familyCode}</S.FamilyCode>
+            <S.TagContainer>
+              <Tag text={`${familyHead.age}세`} disabled />
+            </S.TagContainer>
+          </S.InfoContainer>
+        </S.Wrapper>
+      </Card>
 
-          {familyList.length === 0 ? (
-            <p>아직 가족이 없습니다!</p>
-          ) : (
-            <Card>
-              <S.Title>가족 건강정보</S.Title>
-              {familyList.map((member, index) => (
-                <S.FamilyWrapper
-                  key={`${member.name}-${index}`}
-                  draggable
-                  onDragStart={() => handleDragStart(index)}
-                  onDragOver={handleDragOver}
-                  onDrop={() => handleDrop(index)}
-                  style={{ cursor: 'grab' }}
-                >
-                  <S.LeftGroup>
-                    <img src={PriorityListIcon} alt="icon" />
-                    <S.ProfileImage src={defaultImage} />
-                    <S.InfoContainer>
-                      <S.NameAndCode>
-                        <S.Name>{member.name}</S.Name>
-                        <S.FamilyCode>가족코드 : {familyCode}</S.FamilyCode>
-                      </S.NameAndCode>
-                      <S.TagContainer>
-                        {member.gender === 'Female' ? (
-                          <S.GenderIcon src={FemaleIcon} />
-                        ) : (
-                          <S.GenderIcon src={MaleIcon} />
-                        )}
-                        {member.tags.map((tag, i) => (
-                          <Tag key={i} text={tag} disabled={tag.includes('세')} />
-                        ))}
-                      </S.TagContainer>
-                    </S.InfoContainer>
-                  </S.LeftGroup>
-                  {/* <S.MinusButton src={MinusIcon} alt="minus" /> */}
-                </S.FamilyWrapper>
-              ))}
-            </Card>
-          )}
-        </>
+      {familyList.length === 0 ? (
+        <Card>
+          <S.Title>가족 구성원이 없습니다.</S.Title>
+        </Card>
       ) : (
-        <>
-          <S.AddButton onClick={handleAddFamily}>가족장이 되어 가족 생성하기</S.AddButton>
-          <S.AddButton onClick={openJoinModal}>가족코드로 참여하기</S.AddButton>
-        </>
+        <Card>
+          <S.Title>가족 건강정보</S.Title>
+          {familyList.map((member, index) => (
+            <S.FamilyWrapper
+              key={`${member.name}-${index}`}
+              draggable
+              onDragStart={() => handleDragStart(index)}
+              onDragOver={handleDragOver}
+              onDrop={() => handleDrop(index)}
+              style={{ cursor: 'grab' }}
+            >
+              <S.LeftGroup>
+                <img src={PriorityListIcon} alt="icon" />
+                <S.ProfileImage src={defaultImage} />
+                <S.InfoContainer>
+                  <S.NameAndCode>
+                    <S.Name>{member.name}</S.Name>
+                    <S.FamilyCode>가족코드 : {familyCode}</S.FamilyCode>
+                  </S.NameAndCode>
+                  <S.TagContainer>
+                    {member.gender === 'Female' ? (
+                      <S.GenderIcon src={FemaleIcon} />
+                    ) : (
+                      <S.GenderIcon src={MaleIcon} />
+                    )}
+                    {member.tags.map((tag, i) => (
+                      <Tag key={i} text={tag} disabled={tag.includes('세')} />
+                    ))}
+                  </S.TagContainer>
+                </S.InfoContainer>
+              </S.LeftGroup>
+            </S.FamilyWrapper>
+          ))}
+        </Card>
       )}
 
       <JoinFamilyModal
         isOpen={joinModalOpen}
         onClose={closeJoinModal}
         onJoin={handleJoinFamily}
+        joinCode={joinCode}
+        setJoinCode={setJoinCode}
         isJoining={isJoining}
       />
-      
-      <button style={{border:'none',backgroundColor:"transparent",color:'red', fontFamily:'Pretendard-semiBold',cursor:"pointer"}} onClick={handleDeleteFamily}>가족 삭제</button>
-      <button style={{border:'none',backgroundColor:"transparent",color:'red', fontFamily:'Pretendard-semiBold',cursor:"pointer"}} onClick={handleExitFamily}>가족 탈퇴</button>
+      <button
+        style={{
+          border: 'none',
+          backgroundColor: 'transparent',
+          color: 'red',
+          fontFamily: 'Pretendard-semiBold',
+          cursor: 'pointer',
+        }}
+        onClick={handleDeleteFamily}
+      >
+        가족 삭제
+      </button>
+      <button
+        style={{
+          border: 'none',
+          backgroundColor: 'transparent',
+          color: 'red',
+          fontFamily: 'Pretendard-semiBold',
+          cursor: 'pointer',
+        }}
+        onClick={handleExitFamily}
+      >
+        가족 탈퇴
+      </button>
     </S.Container>
   );
 };

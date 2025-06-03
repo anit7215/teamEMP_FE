@@ -9,17 +9,24 @@ import * as S from './Style';
 import useGetMyHealthTag from '../../hooks/queries/useGetMyHealthTag';
 import useAddHealthTag from '../../hooks/mutations/useAddHealthTag';
 import useDeleteHealthTag from '../../hooks/mutations/useDeleteHealthTag';
+import { useAuth } from '../../context/AuthContext';
 
 const MyPage = () => {
+    const { logout } = useAuth();
     const [isPublic, setIsPublic] = useState("");
     const [keywordForms, setKeywordForms] = useState([{ id: Date.now(), isPublic: "", content: "" }]);
 
     const { data, isLoading, isError, refetch,error } = useGetMyHealthTag();
-    const { mutate: addHealthTag } = useAddHealthTag({
-    onSuccess: () => refetch(),  });
-    const { mutate: deleteHealthTag } = useDeleteHealthTag({
-    onSuccess: () => refetch(),  });
-    
+    const { mutate: addHealthTag } = useAddHealthTag();
+    const { mutate: deleteHealthTag } = useDeleteHealthTag();
+
+    const publicTags = (data || []).filter(tag => tag.public === true || tag.public === 'true');
+    const privateTags = (data || []).filter(tag => tag.public === false || tag.public === 'false');
+
+
+    data?.data?.forEach(tag => console.log(tag.content, '-', tag.public, '-', typeof tag.public));
+
+
     const handleAddKeyword = () => {
         setKeywordForms(prev => [...prev, { id: Date.now() }]);
     };
@@ -31,16 +38,15 @@ const MyPage = () => {
         );
     };
     const handleSubmit = () => {
-  const validTags = keywordForms.filter(form => form.content && form.isPublic);
-  const payload = validTags.map(form => ({
-    content: form.content,
-    isPublic: form.isPublic === "공개"
-  }));
+        const validTags = keywordForms.filter(form => form.content && form.isPublic);
+        const payload = validTags.map(form => ({
+            content: form.content,
+            public: form.isPublic === "공개" ? true : false,
+    }));
 
-  if (payload.length > 0) {
-    addHealthTag(payload);
-  }
-};
+    if (payload.length > 0) {
+        addHealthTag(payload);
+    }};
 
 
     return (
@@ -56,40 +62,32 @@ const MyPage = () => {
                     <S.InfoContainer>
                         <S.Name>현재 공개 키워드</S.Name>
                         <S.TagContainer>
-                            {(data?.data?.length > 0 ? data.data : [
-    { id: 1, content: '테스트 태그1' },
-    { id: 2, content: '테스트 태그2' }
-  ]).map(tag => (
-    <Tag
-      key={tag.id}
-      text={tag.content}
-      onDelete={() => deleteHealthTag(tag.id)}
-    />
-  ))}
-                        {data?.data?.map((tag) => (
-                            <Tag
-                            key={tag.id}
-                            text={tag.content}
-                            onDelete={() => deleteHealthTag(tag.id)}
-                            />
-                        ))}
+                        {publicTags.length > 0 ? publicTags.map(tag => (
+                        <Tag
+                        key={tag.id}
+                        text={tag.content}
+                        onDelete={() => deleteHealthTag(tag.id)}
+                        />
+                    )) : <S.Content>공개된 키워드가 없습니다.</S.Content>}
                         </S.TagContainer>
 
                     </S.InfoContainer>
                 </S.Wrapper>
             </Card>
             <Card>
+                <S.InfoContainer>
                 <S.Title>비공개 키워드</S.Title>
                 <S.TagContainer>
-                        {data?.data?.map((tag) => (
-                            <Tag
-                            key={tag.id}
-                            text={tag.content}
-                            onDelete={() => deleteHealthTag(tag.id)}
-                            disabled={true}
-                            />
-                        ))}
+                        {privateTags.length > 0 ? privateTags.map(tag => (
+                        <Tag
+                        key={tag.id}
+                        text={tag.content}
+                        onDelete={() => deleteHealthTag(tag.id)}
+                        disabled={true}
+                        />
+                    )) : <S.Content>비공개 키워드가 없습니다.</S.Content>}
                 </S.TagContainer>
+                </S.InfoContainer>
             </Card>
             <Card>
                 <S.Title>나의 건강 키워드 등록하기</S.Title>
@@ -135,6 +133,9 @@ const MyPage = () => {
             
             <Card>
                 <S.Title>내가 쓴 글 모아보기</S.Title>
+            </Card>
+            <Card onClick={logout}>
+                <S.Title>로그아웃</S.Title>
             </Card>
         </S.Container>
     );

@@ -5,7 +5,8 @@ import Category from '../../components/common/Category/Cateogry';
 import Button from '../../components/common/Button/Button';
 import Input from '../../components/common/Input/Input';
 import defaultImage from '../../assets/icons/defaultProfile.svg';
-import useGetMyHealthTag from '../../hooks/queries/useGetMyHealthTag';
+import useGetMyInfo from '../../hooks/queries/useGetMyInfo';
+// import useGetMyHealthTag from '../../hooks/queries/useGetMyHealthTag';
 import useAddHealthValue from '../../hooks/mutations/useAddHealthValue';
 
 import * as S from './Style';
@@ -16,7 +17,7 @@ const HomePage = () => {
     const categories = ["혈당", "혈압", "체중", "수면"];
     const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
-    const { data, refetch } = useGetMyHealthTag();
+    const { data: myInfo } = useGetMyInfo();
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
@@ -106,11 +107,10 @@ const HomePage = () => {
                     <S.ProfileImage src={defaultImage} />
                     <S.MeIcon>나</S.MeIcon>
                     <S.InfoContainer>
-                        <S.Name>홍길동</S.Name>
-                        <S.FamilyCode>가족코드 : 123456</S.FamilyCode>
+                        <S.Name>{myInfo?.name||'홍길동'}</S.Name>
                         <S.TagContainer>
-                            {data?.map((tag) => (
-                                <Tag key={tag.id} text={tag.content} disabled={!tag.isPublic} />
+                            {myInfo?.healthTags?.slice().sort((a, b) => Number(b.public) - Number(a.public)).map((tag) => (
+                                <Tag key={tag.id} text={tag.content} disabled={!tag.public} />
                             ))}
                         </S.TagContainer>
 
