@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { exitFamily } from '../../apis/family';
+import { useNavigate } from 'react-router-dom';
 
 const useExitFamily = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: exitFamily,
@@ -18,7 +20,11 @@ const useExitFamily = () => {
 
       return { previousFamily };
     },
-    
+    onSuccess: () => {
+      alert('탈퇴되었습니다.');
+      navigate('/family'); 
+    },
+
     onError: (error) => {
       const code = error.response?.data?.code;
 

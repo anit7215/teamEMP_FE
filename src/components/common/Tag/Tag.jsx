@@ -1,5 +1,5 @@
 import { TagContainer, DeleteButton } from './Style';
-import DeleteIcon from '../../../assets/icons/cancel.svg';
+import DeleteIcon from '../../../assets/icons/Cancel.svg';
 
 const Tag = ({ text, disabled=false, onDelete }) => {
     return (

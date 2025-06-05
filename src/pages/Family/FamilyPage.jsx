@@ -11,7 +11,9 @@ import useGetFamily from '../../hooks/queries/useGetFamily';
 import useExitFamily from '../../hooks/mutations/useExitFamily';
 import MaleIcon from '../../assets/icons/Male.svg';
 import FemaleIcon from '../../assets/icons/Female.svg';
+import MinusIcon from '../../assets/icons/Minus.svg'
 import JoinFamilyModal from '../../components/common/Modal/JoinFamilyModal';
+import ConfirmModal from '../../components/common/Modal/ConfirmModal';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import * as S from './Style';
 
@@ -20,6 +22,8 @@ const FamilyPage = () => {
   const [familyList, setFamilyList] = useState([]);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [joinCode, setJoinCode] = useState('');
+  const [confirmType, setConfirmType] = useState(null); 
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
   const { data, isLoading, isError, refetch, error } = useGetFamily();
   const { mutate: createFamily } = useCreateFamily();
@@ -27,7 +31,6 @@ const FamilyPage = () => {
   const { mutate: exitFamily } = useExitFamily();
   const { mutate: joinFamily, isLoading: isJoining } = useJoinFamily({
     onSuccess: () => {
-      setJoinModalOpen(false);
       setJoinCode('');
       refetch();
     },
@@ -40,13 +43,14 @@ const FamilyPage = () => {
   useEffect(() => {
     if (familyInfo?.familyMembers) {
       const list = familyInfo.familyMembers.map((member, i) => {
-        const healthTags = member.healthState ?? [];
+        const healthTags = member.healthTag ?? [];
         const genderText = member.gender?.toLowerCase() === 'female' ? 'Female' : 'Male';
         return {
           id: i,
           name: member.name,
           gender: genderText,
-          tags: [...healthTags, `${member.age}세`, genderText],
+          tags: [...healthTags, `${member.age}세`],
+          healthTag: healthTags, 
         };
       });
       setFamilyList(list);
@@ -56,6 +60,23 @@ const FamilyPage = () => {
   const handleAddFamily = () => createFamily({ name: '우리 가족' });
   const handleDeleteFamily = () => deleteFamily();
   const handleExitFamily = () => exitFamily();
+
+  const openConfirmModal = (type) => {
+    setConfirmType(type);
+    setConfirmModalOpen(true);
+  };
+
+  const closeConfirmModal = () => {
+    setConfirmType(null);
+    setConfirmModalOpen(false);
+  };
+
+  const handleConfirm = () => {
+    if (confirmType === 'delete') handleDeleteFamily();
+    if (confirmType === 'exit') handleExitFamily();
+    closeConfirmModal();
+  };
+
 
   const handleDragStart = (index) => setDraggedIndex(index);
   const handleDragOver = (e) => e.preventDefault();
@@ -80,7 +101,7 @@ const FamilyPage = () => {
       alert('가족 코드를 입력해주세요.');
       return;
     }
-    joinFamily(joinCode);
+    joinFamily({ code: joinCode }); 
   };
 
   if (isLoading) return <LoadingSpinner />;
@@ -89,7 +110,7 @@ const FamilyPage = () => {
       return (
         <S.Container>
           <Card>
-            <div style={{display:'flex', alignItems:'center',textAlign:'center'}}>아직 가족이 없습니다!</div>
+            <S.NoFamily>아직 가족이 없습니다!</S.NoFamily>
             <S.AddButton onClick={handleAddFamily}>가족장이 되어 가족 생성하기</S.AddButton>
             <S.AddButton onClick={openJoinModal}>가족코드로 참여하기</S.AddButton>
           </Card>
@@ -105,10 +126,10 @@ const FamilyPage = () => {
       );
     } else {
       return (
-        <p>
+        <S.Title>
           가족 정보를 불러오는 중 오류가 발생했습니다.
           <button onClick={() => refetch()}>다시 시도</button>
-        </p>
+        </S.Title>
       );
     }
   }
@@ -116,11 +137,28 @@ const FamilyPage = () => {
   return (
     <S.Container>
       <Card>
+        <S.Top>
+        <div>
         <S.Title>나의 가족정보</S.Title>
         <S.Content>
           가족의 건강정보를 확인하고, 관리해보세요.<br />
           가족 간에는 캘린더 공유가 가능합니다.
         </S.Content>
+        </div>
+        <button
+        style={{
+          border: 'none',
+          backgroundColor: 'transparent',
+          color: '#CC2F2F',
+          fontFamily: 'Pretendard-semiBold',
+          cursor: 'pointer',
+          width:'24px', height:'24px',
+        }}
+         onClick={() => openConfirmModal('delete')}
+      >
+        <img src={MinusIcon} alt='삭제아이콘'/>
+      </button>
+      </S.Top>
       </Card>
 
       <Card>
@@ -135,6 +173,9 @@ const FamilyPage = () => {
             </S.NameWrapper>
             <S.FamilyCode>가족코드 : {familyCode}</S.FamilyCode>
             <S.TagContainer>
+              {familyHead.healthTag.map((tag, i) => (
+                <Tag key={i} text={tag} />
+              ))}
               <Tag text={`${familyHead.age}세`} disabled />
             </S.TagContainer>
           </S.InfoContainer>
@@ -171,6 +212,9 @@ const FamilyPage = () => {
                     ) : (
                       <S.GenderIcon src={MaleIcon} />
                     )}
+                    {member.healthTag.map((tag, i) => (
+                      <Tag key={i} text={tag} />
+                    ))}
                     {member.tags.map((tag, i) => (
                       <Tag key={i} text={tag} disabled={tag.includes('세')} />
                     ))}
@@ -190,30 +234,30 @@ const FamilyPage = () => {
         setJoinCode={setJoinCode}
         isJoining={isJoining}
       />
+      
       <button
         style={{
           border: 'none',
           backgroundColor: 'transparent',
-          color: 'red',
+          color: '#CC2F2F',
           fontFamily: 'Pretendard-semiBold',
           cursor: 'pointer',
         }}
-        onClick={handleDeleteFamily}
-      >
-        가족 삭제
-      </button>
-      <button
-        style={{
-          border: 'none',
-          backgroundColor: 'transparent',
-          color: 'red',
-          fontFamily: 'Pretendard-semiBold',
-          cursor: 'pointer',
-        }}
-        onClick={handleExitFamily}
+         onClick={() => openConfirmModal('exit')}
       >
         가족 탈퇴
       </button>
+      <ConfirmModal
+        isOpen={confirmModalOpen}
+        onClose={closeConfirmModal}
+        onConfirm={handleConfirm}
+        message={
+          confirmType === 'delete'
+            ? '정말로 가족을 삭제하시겠습니까?'
+            : '정말로 가족을 탈퇴하시겠습니까?'
+        }
+      />
+
     </S.Container>
   );
 };

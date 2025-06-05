@@ -157,3 +157,20 @@ export const GenderIcon = styled.img`
   width: 16px;
   height: 16px;
 `;
+
+export const NoFamily = styled.div`
+  color: #474a52;
+  font-family: Pretendard-SemiBold;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-align:center;
+  margin-top:20px;
+  margin-bottom:20px;
+`;
+
+export const Top = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;

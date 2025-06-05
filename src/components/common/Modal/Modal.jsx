@@ -17,21 +17,21 @@ const Overlay = styled.div`
 `;
 
 const ModalContainer = styled.div`
-//   max-height: 80vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   overflow-y: auto;
-  width: 100%;
+  width: calc(100% - 50px);
   padding: 0 25px;
-//   background: white;
-margin-bottom:130px;
+  margin-bottom:130px;
   border-radius: 20px;
 `;
 
 const Modal = ({ children, onClose }) => {
   useEffect(() => {
-    // 모달 열릴 때 스크롤 막기
     document.body.style.overflow = 'hidden';
     return () => {
-      // 모달 닫힐 때 원래대로
       document.body.style.overflow = 'auto';
     };
   }, []);

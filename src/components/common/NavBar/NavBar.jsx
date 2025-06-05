@@ -33,10 +33,10 @@ const NavBar = () => {
         active={location.pathname === "/community"}
       />
       <NavButton
-        to="/mypage"
-        Icon={location.pathname === "/mypage" ? ReservationActive : ReservationIcon}
-        label="마이페이지"
-        active={location.pathname === "/mypage"}
+        to="/family"
+        Icon={location.pathname === "/family" ? FamilyActive : FamilyIcon}
+        label="가족정보"
+        active={location.pathname === "/family"}
       />
       <NavButton
         to="/home"
@@ -44,16 +44,16 @@ const NavBar = () => {
         isHome={true}
       />
       <NavButton
-        to="/family"
-        Icon={location.pathname === "/family" ? FamilyActive : FamilyIcon}
-        label="가족정보"
-        active={location.pathname === "/family"}
-      />
-      <NavButton
         to="/calendar"
         Icon={location.pathname === "/calendar" ? CalendarActive : CalendarIcon}
         label="캘린더"
         active={location.pathname === "/calendar"}
+      />
+      <NavButton
+        to="/mypage"
+        Icon={location.pathname === "/mypage" ? ReservationActive : ReservationIcon}
+        label="마이페이지"
+        active={location.pathname === "/mypage"}
       />
     </S.NavWrapper>
   );
