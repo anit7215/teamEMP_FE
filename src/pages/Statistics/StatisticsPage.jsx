@@ -5,148 +5,164 @@ import {
 import Card from '../../components/common/Card/Card';
 import Category from '../../components/common/Category/Cateogry';
 import CalendarHeader from '../../components/Calendar/Header';
-import GraphImage from '../../assets/icons/graph.png';
 import * as S from './Style';
+import { fetchWeeklyHealthData, fetchMonthlyHealthData } from '../../apis/Statistics';
+import useGetMyInfo from '../../hooks/queries/useGetMyInfo'; //커스텀 훅 import
+import dayjs from 'dayjs';
+
+const groupByWeekOfMonth = (records) => {
+  const weekMap = {};
+
+  records.forEach(item => {
+    const date = dayjs(item.date);
+    const week = Math.ceil(date.date() / 7); // 1~7일 → 1주차, ...
+
+    if (!weekMap[week]) {
+      weekMap[week] = [];
+    }
+    weekMap[week].push(Number(item.value));
+  });
+
+  // 각 주차의 평균값 계산
+  const groupedData = Object.entries(weekMap).map(([week, values]) => {
+    const average = values.reduce((sum, v) => sum + v, 0) / values.length;
+    return {
+      name: `${week}주차`,
+      value: Number(average.toFixed(2)),
+    };
+  });
+
+  return groupedData.sort((a, b) => parseInt(a.name) - parseInt(b.name));
+};
 
 const StatisticsPage = () => {
-    const categories = ["주간", "월간"];
-    const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-    const [graphData, setGraphData] = useState([]);
+  const categories = ["주간", "월간"];
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [graphData, setGraphData] = useState([]);
+  const [healthComment, setHealthComment] = useState("");
 
-    const sampleDailyData = [ //더미데이터
-    { name: "05/19", value: 90 },
-    { name: "05/20", value: 110 },
-    { name: "05/21", value: 100 },
-    { name: "05/22", value: 130 },
-    { name: "05/23", value: 95 },
-    { name: "05/24", value: 120 },
-    { name: "05/25", value: 105 },
-  ];
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth());
 
-  const calculateWeeklyAverages = (dailyData) => {
-    // 일단은 1주만 값 존재
-    const week1 = dailyData.slice(0, 7);
-    const avg = Math.round(
-      week1.reduce((acc, cur) => acc + cur.value, 0) / week1.length
-    );
-
-    return [
-      { name: "1주차", value: avg },
-      { name: "2주차", value: 115 }, // 더미
-      { name: "3주차", value: 125 },
-      { name: "4주차", value: 105 },
-    ];
+  // 월 이동 함수
+  const handlePrevMonth = () => {
+    if (month === 0) {
+      setMonth(11);
+      setYear(prev => prev - 1);
+    } else {
+      setMonth(prev => prev - 1);
+    }
   };
 
-  useEffect(() => {
-    if (selectedCategory === "주간") {
-      const formattedData = sampleDailyData.map((d, idx) => ({
-        name: ["05/19", "05/20", "05/21", "05/22", "05/23", "05/24",  "05/25"][idx],
-        value: d.value,
-      }));
-      setGraphData(formattedData);
-    } else if (selectedCategory === "월간") {
-      const weeklyAvgData = calculateWeeklyAverages(sampleDailyData);
-      setGraphData(weeklyAvgData);
+  const handleNextMonth = () => {
+    if (month === 11) {
+      setMonth(0);
+      setYear(prev => prev + 1);
+    } else {
+      setMonth(prev => prev + 1);
     }
-  }, [selectedCategory]);
+  };
 
-    const handleCategoryChange = (category) => {
-        setSelectedCategory(category);
+  const { data: userInfo, isLoading, isError } = useGetMyInfo(); //사용자 정보 가져오기
+  const token = localStorage.getItem("accessToken");
+  console.log(userInfo?.verifyId);
+  useEffect(() => {
+    const getWeeklyData = async () => {
+      if (!token || isError || !userInfo?.verifyId) {
+        setHealthComment("로그인이 필요합니다.");
+        setGraphData([]);
+        return;
+      }
+
+      try {
+        const data = await fetchWeeklyHealthData(userInfo.verifyId, 2025, 6, 1, "BLOOD_SUGAR", token);
+        const apiData = data.recordGraphRes.map(item => ({
+          name: item.date.slice(5), // MM-DD
+          value: Number(item.value),
+        }));
+        setGraphData(apiData);
+        setHealthComment(data.healthComment || "");
+      } catch (error) {
+        console.error("건강 데이터 불러오기 실패:", error);
+        setHealthComment("데이터를 불러오는 데 실패했습니다.");
+        setGraphData([]);
+      }
     };
 
-    const getContentForCategory = () =>{
-      return (
+    const getMonthlyData = async () => {
+      if (!token || isError || !userInfo?.verifyId) {
+        setHealthComment("로그인이 필요합니다.");
+        setGraphData([]);
+        return;
+      }
+
+      try {
+        const data = await fetchMonthlyHealthData(userInfo.verifyId, 2025, 6, "BLOOD_SUGAR", token);
+        const groupedData = groupByWeekOfMonth(data.recordGraphRes);
+        setGraphData(groupedData);
+        setHealthComment(data.healthComment || "");
+      } catch (error) {
+        console.error("월간 건강 데이터 불러오기 실패:", error);
+        setHealthComment("월간 데이터를 불러오는 데 실패했습니다.");
+        setGraphData([]);
+      }
+    };
+
+
+    if (selectedCategory === "주간" && userInfo && !isLoading) {
+      getWeeklyData();
+    } else if (selectedCategory === "월간" && userInfo && !isLoading) {
+      getMonthlyData();
+    }
+  }, [selectedCategory, userInfo, isLoading, isError, token, year, month]);
+
+
+  return (
+    <S.Container>
+      <Card style={{ marginBottom: '16px' }}>
+        <S.Title>나의 혈당통계</S.Title>
+        <S.Content>월간 혈당을 한 눈에 볼 수 있습니다.</S.Content>
+      </Card>
+
+      <Category
+        labels={categories}
+        selectedTab={selectedCategory}
+        onTabClick={setSelectedCategory}
+      />
+
+      <Card style={{ marginTop: '16px' }}>
+        <CalendarHeader
+          year={year}
+          month={month}
+          onPrev={handlePrevMonth}
+          onNext={handleNextMonth}
+        />
         <S.GraphWrapper>
           <ResponsiveContainer width="100%" height={320}>
-            <LineChart data={graphData} margin={{  right: 30 }}>
-              <XAxis dataKey="name"/>
+            <LineChart data={graphData} margin={{ right: 30 }}>
+              <XAxis
+                dataKey="name"
+                padding={{ left: 20, right: 20 }}
+                interval="preserveStartEnd"
+              />
               <Tooltip />
-              <Line type="linear" dataKey="value" strokewidth={2} stroke="#42CCC5"/>
+              <Line
+                type="linear"
+                dataKey="value"
+                strokeWidth={2}
+                stroke="#42CCC5"
+              />
             </LineChart>
           </ResponsiveContainer>
         </S.GraphWrapper>
-      );
-    };
+      </Card>
 
-      const today = new Date();
-      const [currentDate, setCurrentDate] = useState(new Date());
-      const [selectedDate, setSelectedDate] = useState(null);
-    
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
-      const weeks = getMonthData(year, month);
-    
-      const handlePrevMonth = () => {
-        setCurrentDate(new Date(year, month - 1, 1));
-        setSelectedDate(null);
-      };
-    
-      const handleNextMonth = () => {
-        setCurrentDate(new Date(year, month + 1, 1));
-        setSelectedDate(null);
-      };
-    
-      const handleDateClick = (day) => {
-        if (day) setSelectedDate(new Date(year, month, day));
-      };
-
-    return (
-        <S.Container>
-            <Card>
-                <S.Title>
-                    나의 혈당통계
-                </S.Title>
-                <S.Content>
-                    월간 혈당을 한 눈에 볼 수 있습니다.
-                </S.Content>
-            </Card>
-            <Category labels={categories} selectedTab={selectedCategory} onTabClick={setSelectedCategory}/>
-            <Card>
-
-                    <CalendarHeader
-                      year={year}
-                      month={month}
-                      onPrev={handlePrevMonth}
-                      onNext={handleNextMonth}
-                    />
-                    {getContentForCategory()}
-                  </Card>
-
-            <S.Card>
-                <S.CardTitle>
-                    혈당 통계요약
-                </S.CardTitle>
-                <S.CardContent>
-                    주간 혈당 통계가 일정하지 않습니다. 혈당 조절에 더욱 힘써보세요. 혈당 상승은 알게 모르게 일어납니다. 혹시나 식사 후 액상과당을 섭취하고 있지는 않나요? 생활습관을 다시 한 번 돌아보세요.
-                </S.CardContent>
-            </S.Card>
-        </S.Container>
-    );
-}
-
-function getMonthData(year, month) {
-  const firstDay = new Date(year, month, 1).getDay();
-  const lastDate = new Date(year, month + 1, 0).getDate();
-
-  const weeks = [];
-  let dayCounter = 1;
-
-  let firstWeek = new Array(7).fill(null);
-  for (let i = firstDay; i < 7; i++) {
-    firstWeek[i] = dayCounter++;
-  }
-  weeks.push(firstWeek);
-
-  while (dayCounter <= lastDate) {
-    let week = new Array(7).fill(null);
-    for (let i = 0; i < 7 && dayCounter <= lastDate; i++) {
-      week[i] = dayCounter++;
-    }
-    weeks.push(week);
-  }
-
-  return weeks;
-}
+      <S.Card>
+        <S.CardTitle>혈당 통계요약</S.CardTitle>
+        <S.CardContent>{healthComment}</S.CardContent>
+      </S.Card>
+    </S.Container>
+  );
+};
 
 export default StatisticsPage;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card/Card';
 import Tag from '../../components/common/Tag/Tag';
 import Category from '../../components/common/Category/Cateogry';
@@ -11,6 +12,7 @@ import useAddHealthValue from '../../hooks/mutations/useAddHealthValue';
 import * as S from './Style';
 
 const HomePage = () => {
+    const navigate = useNavigate(); 
     const [inputValue, setInputValue] = useState('');
     const { mutate: addHealthValueMutate } = useAddHealthValue();
     const categories = ["혈당", "혈압", "체중", "수면"];
@@ -84,11 +86,12 @@ const HomePage = () => {
                 onSuccess: (data) => {
                     if (data.code === 'GEN-000') {
                         alert(`${typeMap} 정보가 기록되었습니다!`);
-                        navigate('/statistics'); 
                     }
                 }
             }
         );
+        navigate('/statistics'); 
+
 
         setInputValue('');
     };

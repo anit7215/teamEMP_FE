@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card/Card';
 import PostButton from '../../components/Community/PostButton';
+import likesIcon from '../../assets/icons/likes.png';
+import mentionIcon from '../../assets/icons/mention.png';
 import * as S from './Style';
 
 
@@ -12,20 +14,23 @@ const CommunityPage = () => {
     {
       id: 1,
       author: '익명1(나의 글)',
-      date: '2025-04-15 23:06',
+      date: '2025-04-15',
+      time: '23:06',
       content: '진짜 땡깡이라는 말 없어졌으면.. 발작 이런 것도요. 너무 이미지가 나쁜 듯해요.',
       isMine: true,
     },
     {
       id: 2,
       author: '익명1',
-      date: '2025-04-15 23:06',
+      date: '2025-04-15',
+      time: '23:06',
       content: '진짜 땡깡이라는 말 없어졌으면.. 발작 이런 것도요. 너무 이미지가 나쁜 듯해요.',
     },
     {
       id: 3,
       author: '익명1',
-      date: '2025-04-15 23:06',
+      date: '2025-04-15',
+      time: '23:06',
       content: '진짜 땡깡이라는 말 없어졌으면.. 발작 이런 것도요. 너무 이미지가 나쁜 듯해요.',
     },
     ];
@@ -34,6 +39,10 @@ const CommunityPage = () => {
     navigate('/community/post');
     };
 
+    const handleMentionPage = () => {
+      navigate('/community/mention');
+    };
+    
     return (
         <>
         <Card>
@@ -42,11 +51,16 @@ const CommunityPage = () => {
         </Card>
 
         {posts.map((post) => (
-        <S.PostCard key={post.id}>
+        <S.PostCard key={post.id} onClick={handleMentionPage}>
           <S.Title>
-            {post.author}
-            {post.date}
-            {post.isMine && <span className="delete">삭제</span>}
+            <S.LeftGroup>
+              <S.Author>{post.author}</S.Author>
+              <S.Date>{post.date}</S.Date>
+              <S.Time>{post.time}</S.Time>
+            </S.LeftGroup>
+            <S.IsMine>
+              {post.isMine && <span className="delete">삭제</span>}
+            </S.IsMine>
           </S.Title>
           <S.PostContent>{post.content}</S.PostContent>
             <S.PostActions>
@@ -58,5 +72,6 @@ const CommunityPage = () => {
         <PostButton onClick={handlePostPage} />
         </>
     );
+
 }
 export default CommunityPage;
