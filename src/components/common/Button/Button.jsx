@@ -15,7 +15,7 @@ const Button = ({ text, to, disabled = false, onClick, type, buttonStyle }) => {
     };
 
     return (
-        <S.Container type={type} onClick={handleClick} disabled={disabled} buttonStyle={buttonStyle}>
+        <S.Container type={type} onClick={handleClick} disabled={disabled} {...(buttonStyle ? {} : {})}>
             <S.Text>{text}</S.Text>
         </S.Container>
     );
