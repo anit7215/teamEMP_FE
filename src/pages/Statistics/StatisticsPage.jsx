@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   LineChart, Line, XAxis, Tooltip, ResponsiveContainer
 } from "recharts";
@@ -7,12 +8,12 @@ import Category from '../../components/common/Category/Cateogry';
 import CalendarHeader from '../../components/Calendar/Header';
 import * as S from './Style';
 import { fetchWeeklyHealthData, fetchMonthlyHealthData } from '../../apis/Statistics';
-import useGetMyInfo from '../../hooks/queries/useGetMyInfo'; //커스텀 훅 import
+import useGetMyInfo from '../../hooks/queries/useGetMyInfo'; 
 import dayjs from 'dayjs';
 
 const groupByWeekOfMonth = (records) => {
   const weekMap = {};
-
+  
   records.forEach(item => {
     const date = dayjs(item.date);
     const week = Math.ceil(date.date() / 7); // 1~7일 → 1주차, ...
@@ -40,9 +41,21 @@ const StatisticsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [graphData, setGraphData] = useState([]);
   const [healthComment, setHealthComment] = useState("");
-
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
+  
+  const location = useLocation();
+
+  const getQueryParam = (param) => {
+    const params = new URLSearchParams(location.search);
+    return params.get(param);
+  };
+
+  const [selectedType, setSelectedType] = useState(getQueryParam('type'));
+  useEffect(() => {
+    const newType = getQueryParam('type') || 'BLOOD_SUGAR';
+    setSelectedType(newType);
+  }, [location.search]);
 
   // 월 이동 함수
   const handlePrevMonth = () => {
@@ -63,9 +76,9 @@ const StatisticsPage = () => {
     }
   };
 
-  const { data: userInfo, isLoading, isError } = useGetMyInfo(); //사용자 정보 가져오기
+  const { data: userInfo, isLoading, isError } = useGetMyInfo(); // 사용자 정보 가져오기
   const token = localStorage.getItem("accessToken");
-  console.log(userInfo?.verifyId);
+
   useEffect(() => {
     const getWeeklyData = async () => {
       if (!token || isError || !userInfo?.verifyId) {
@@ -75,7 +88,14 @@ const StatisticsPage = () => {
       }
 
       try {
-        const data = await fetchWeeklyHealthData(userInfo.verifyId, 2025, 6, 1, "BLOOD_SUGAR", token);
+        const data = await fetchWeeklyHealthData(
+          userInfo.verifyId,
+          year,
+          month + 1,
+          1,
+          selectedType,
+          token
+        );
         const apiData = data.recordGraphRes.map(item => ({
           name: item.date.slice(5), // MM-DD
           value: Number(item.value),
@@ -97,7 +117,13 @@ const StatisticsPage = () => {
       }
 
       try {
-        const data = await fetchMonthlyHealthData(userInfo.verifyId, 2025, 6, "BLOOD_SUGAR", token);
+        const data = await fetchMonthlyHealthData(
+          userInfo.verifyId,
+          year,
+          month + 1,
+          selectedType,
+          token
+        );
         const groupedData = groupByWeekOfMonth(data.recordGraphRes);
         setGraphData(groupedData);
         setHealthComment(data.healthComment || "");
@@ -108,20 +134,24 @@ const StatisticsPage = () => {
       }
     };
 
-
     if (selectedCategory === "주간" && userInfo && !isLoading) {
       getWeeklyData();
     } else if (selectedCategory === "월간" && userInfo && !isLoading) {
       getMonthlyData();
     }
-  }, [selectedCategory, userInfo, isLoading, isError, token, year, month]);
-
+  }, [selectedCategory, selectedType, userInfo, isLoading, isError, token, year, month]);
+  const typeNameMap = {
+    BLOOD_SUGAR: '혈당',
+    BLOOD_PRESSURE: '혈압',
+    WEIGHT: '체중',
+    SLEEP_TIME: '수면 시간'
+  };
 
   return (
     <S.Container>
       <Card style={{ marginBottom: '16px' }}>
-        <S.Title>나의 혈당통계</S.Title>
-        <S.Content>월간 혈당을 한 눈에 볼 수 있습니다.</S.Content>
+        <S.Title>나의 {typeNameMap[selectedType]} 통계</S.Title>
+        <S.Content>{selectedCategory} {typeNameMap[selectedType]}을 한 눈에 볼 수 있습니다.</S.Content>
       </Card>
 
       <Category
@@ -158,7 +188,7 @@ const StatisticsPage = () => {
       </Card>
 
       <S.Card>
-        <S.CardTitle>혈당 통계요약</S.CardTitle>
+        <S.CardTitle>{typeNameMap[selectedType]} 통계요약</S.CardTitle>
         <S.CardContent>{healthComment}</S.CardContent>
       </S.Card>
     </S.Container>

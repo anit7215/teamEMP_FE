@@ -85,12 +85,12 @@ const HomePage = () => {
             {
                 onSuccess: (data) => {
                     if (data.code === 'GEN-000') {
-                        alert(`${typeMap} 정보가 기록되었습니다!`);
+                        alert(`${selectedCategory} 정보가 기록되었습니다!`);
                     }
                 }
             }
         );
-        navigate('/statistics'); 
+        navigate(`/statistics?type=${type}`);
 
 
         setInputValue('');
