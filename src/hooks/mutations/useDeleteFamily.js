@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { deleteFamily } from '../../apis/family';
 
 const useDeleteFamily = () => {
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: deleteFamily,
     onMutate: async () => {
@@ -17,6 +18,10 @@ const useDeleteFamily = () => {
       }));
 
       return { previousFamily };
+    },
+    onSuccess: () => {
+      alert('가족이 삭제되었습니다.');
+      navigate('/family'); 
     },
 
     onError: (_err, _vars, context) => {

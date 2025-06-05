@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
       alert('프로필 설정이 필요합니다!');
       window.location.href = '/profilesetting';
     } else {
-      alert('로그인 성공');
+      // alert('로그인 성공');
       window.location.href = '/home';
     }
   } catch (error) {

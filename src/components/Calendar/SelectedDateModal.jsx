@@ -45,10 +45,13 @@ const ScheduleWrapper = styled.div`
 
 function SelectedDateModal({ selectedDate, onClose, selectedCategory, onCategoryChange, categories }) {
   if (!selectedDate) return null;
-  // const hasSchedule = null; 
   const hasSchedule = 1;
-  
-
+  const typeMap = {
+            "복약관리": "MEDICATION",
+            "진료관리": "CHECKUP",
+            "진료일정": "RESERVATION",
+  };
+  const type = typeMap[selectedCategory];
 
   return (
     <Modal onClose={onClose}>
@@ -114,7 +117,7 @@ function SelectedDateModal({ selectedDate, onClose, selectedCategory, onCategory
           <Content>글자 수는 4글자로 제한됩니다.</Content>
           <PriorityList/>
         </Card>
-      )};
+      )}
       
     </Modal>
   );

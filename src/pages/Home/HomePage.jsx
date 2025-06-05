@@ -7,7 +7,6 @@ import Button from '../../components/common/Button/Button';
 import Input from '../../components/common/Input/Input';
 import defaultImage from '../../assets/icons/defaultProfile.svg';
 import useGetMyInfo from '../../hooks/queries/useGetMyInfo';
-// import useGetMyHealthTag from '../../hooks/queries/useGetMyHealthTag';
 import useAddHealthValue from '../../hooks/mutations/useAddHealthValue';
 
 import * as S from './Style';
@@ -86,12 +85,12 @@ const HomePage = () => {
             {
                 onSuccess: (data) => {
                     if (data.code === 'GEN-000') {
-                        alert(`${typeMap} 정보가 기록되었습니다!`);
+                        alert(`${selectedCategory} 정보가 기록되었습니다!`);
                     }
                 }
             }
         );
-        navigate('/statistics'); 
+        navigate(`/statistics?type=${type}`);
 
 
         setInputValue('');
@@ -103,14 +102,14 @@ const HomePage = () => {
     return (
         <S.Container>
             <S.Card>
-                오늘도 홍길동님의 건강을 체크해보세요!
+                오늘도 {myInfo?.name}님의 건강을 체크해보세요!
             </S.Card>
             <Card>
                 <S.Wrapper>
                     <S.ProfileImage src={defaultImage} />
                     <S.MeIcon>나</S.MeIcon>
                     <S.InfoContainer>
-                        <S.Name>{myInfo?.name||'홍길동'}</S.Name>
+                        <S.Name>{myInfo?.name}</S.Name>
                         <S.TagContainer>
                             {myInfo?.healthTags?.slice().sort((a, b) => Number(b.public) - Number(a.public)).map((tag) => (
                                 <Tag key={tag.id} text={tag.content} disabled={!tag.public} />
