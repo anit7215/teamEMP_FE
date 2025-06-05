@@ -1,6 +1,30 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      // 페이지 로드 즉시 카카오 스크립트 동적 로딩
+      (function() {
+        console.log('카카오 스크립트 동적 로딩 시작');
+        
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=2e874be546fe58cb5e5fa439db51cb7c&autoload=false';
+        
+        script.onload = function() {
+          console.log(' 카카오 스크립트 동적 로딩 성공');
+          window.kakaoScriptLoaded = true;
+        };
+        
+        script.onerror = function(error) {
+          console.error(' 카카오 스크립트 동적 로딩 실패:', error);
+          window.kakaoScriptError = true;
+        };
+        
+        // 즉시 head에 추가
+        document.head.appendChild(script);
+        console.log('카카오 스크립트 태그 추가됨');
+      })();
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png+xml" href="/icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />

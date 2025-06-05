@@ -10,6 +10,7 @@ import FamilyPage from './pages/Family/FamilyPage';
 import CalendarPage from './pages/Calendar/CalendarPage';
 import CommunityPage from './pages/Community/CommunityPage';
 import CommunityPostPage from './pages/Community/CommunityPostPage';
+import CommunityMentionPage from './pages/Community/CommunityMentionPage'; 
 import EmergencyPage from './pages/Emergency/EmergencyPage';
 import ReservationPage from './pages/Reservation/ReservationPage';
 import StatisticsPage from './pages/Statistics/StatisticsPage';
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
            {
             path: 'community/post',
             element: <CommunityPostPage />,
+          },
+          {
+            path: 'community/mention',
+            element: <CommunityMentionPage/>
           },
           {
             path:'reservation',
