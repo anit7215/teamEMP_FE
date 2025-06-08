@@ -31,6 +31,14 @@ const CommunityMentionPage = () => {
       date: '2025-04-15',
       time: '23:06',
       content: '저도 공감해요'
+    },
+    {
+      id: 1,
+      author: '익명1(나의 댓글)',
+      date: '2025-04-15',
+      time: '23:06',
+      content: '속상해요.',
+      isMine: true,
     }
   ];
 
@@ -51,7 +59,8 @@ const CommunityMentionPage = () => {
         <S.PostCard key={post.id} onClick={() => handleMentionPage(post.id)}>
           <S.Title>
             <S.LeftGroup>
-                <S.Author>{post.author}</S.Author>                    <S.Date>{post.date}</S.Date>
+                <S.Author>{post.author}</S.Author>                    
+                <S.Date>{post.date}</S.Date>
                 <S.Time>{post.time}</S.Time>
             </S.LeftGroup>
             <S.IsMine>
@@ -75,13 +84,18 @@ const CommunityMentionPage = () => {
             </S.LeftGroup>
             <S.IsMine>
                 {mention.isMine && <span className="delete">삭제</span>}
+                {mention.isMine && 
+                  <span
+                    className="edit"
+                    onClick={(e) => {
+                    e.stopPropagation(); // 카드 클릭 이벤트가 발생하지 않도록 막음
+                    navigate(`/community/edit/${mention.id}`);}}>수정</span>}
             </S.IsMine>
         </S.Title>
         <S.PostContent>{mention.content}</S.PostContent>
         </S.PostCard>
       ))}
 
-      {/* 댓글 입력창 */}
       <S.MentionInputWrapper>
         <S.MentionInput
           type="text"

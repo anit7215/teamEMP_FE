@@ -63,7 +63,7 @@ export const TR = styled.div`
     border-bottom: 1px solid #999;
 `;
 
-export const TD = styled.p`
+export const TD = styled.div`
     color: #474A52;
     font-family: Pretendard-SemiBold;
     font-size: 12px;

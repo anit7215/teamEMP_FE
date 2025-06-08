@@ -26,6 +26,7 @@ import LoginFailPage from './pages/Login/LoginFailPage';
 import NotFound from './pages/Error/ErrorPage';
 import { AuthProvider } from './context/AuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import CommunityPostEditPage from './pages/Community/CommunityPostEditPage';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
           {
             path: 'community/mention',
             element: <CommunityMentionPage/>
+          },
+          {
+            path: 'community/edit/:postId',
+            element: <CommunityPostEditPage/>
           },
           {
             path:'reservation',
