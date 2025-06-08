@@ -53,6 +53,15 @@ export const InputField = styled.textarea`
   }
 `;
 
+export const Input = styled.input`
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px 10px;
+  text-alighn:center;
+  border: none;
+  border-bottom: 0.5px solid #999;
+`;
 
 export const Wrapper = styled.div`
   width: calc(50% - 8px);

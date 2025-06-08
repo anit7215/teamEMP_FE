@@ -72,36 +72,32 @@ const EmergencyPage = () => {
   };
 
   //통합
-  const handleFetchBoth = async () => {
-    try {
-      // 현재 위치
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      });
+ const handleFetchBoth = async () => {
+  try {
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
 
-      const userLatitude = position.coords.latitude;
-      const userLongitude = position.coords.longitude;
+    const userLatitude = position.coords.latitude;
+    const userLongitude = position.coords.longitude;
 
-      console.log('통합 조회 - 실제 사용된 위치:', userLatitude, userLongitude);
+    console.log('통합 조회 - 실제 사용된 위치:', userLatitude, userLongitude);
 
-      // API 호출
-      const data = await fetchNearbyBoth({ latitude: userLatitude, longitude: userLongitude });
-      
-      // 통합 API 응답에서 AED와 응급실 데이터 분리
-      setAedList(data.aedList || []);
-      setHospitalList(data.hospitalList || []);
-      setCurrentView('both');
-    } catch (error) {
-      console.error('통합 조회 실패:', error);
-      
-      // 실패일 경우
-      if (error.code === 1) {
-        alert('위치 권한이 필요합니다. 브라우저 설정을 확인해주세요.');
-      } else {
-        alert('현재 위치를 가져올 수 없습니다.');
-      }
+    const data = await fetchNearbyBoth({ latitude: userLatitude, longitude: userLongitude });
+
+    setAedList(data.aedLocations || []);
+    setHospitalList(data.emergencyRooms || []);
+    setCurrentView('both');
+  } catch (error) {
+    console.error('통합 조회 실패:', error);
+
+    if (error.code === 1) {
+      alert('위치 권한이 필요합니다. 브라우저 설정을 확인해주세요.');
+    } else {
+      alert('현재 위치를 가져올 수 없습니다.');
     }
-  };
+  }
+};
 
   return (
     <>
