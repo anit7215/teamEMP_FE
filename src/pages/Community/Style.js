@@ -55,6 +55,7 @@ export const IsMine = styled.span`
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  gap: 4px;
 `
 export const Content = styled.div`
   color: #686b73;
