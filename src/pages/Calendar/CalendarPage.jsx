@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from '../../components/common/Card/Card';
 import CalendarHeader from '../../components/Calendar/Header';
 import CalendarGrid from '../../components/Calendar/Calendar';
 import { getMonthData } from '../../utils/calendar';
-import SelectedDateModal from '../../components/Calendar/SelectedDateModal';
-import { getCalendarEventsByDate } from '../../apis/auth';
-
+import SelectedDateModal from '../../components/Calendar/SelectedDateModal/SelectedDateModal';
+import { getCalendarEventsByDate, getAllCalendarEvents } from '../../apis/calendar';
 
 const CalendarContainer = styled.div`
   margin-bottom: 100px;
@@ -29,17 +28,12 @@ const Content = styled.p`
 
 function CalendarPage() {
   const today = new Date();
-  // 일정 임시 데이터
-  // const events = {
-  // '2025-05-16': ['진료', '약 복용'],
-  // '2025-05-18': ['치과 예약'],
-  // '2025-06-20': ['약 복용', '진료'],
-  // }; 
   const categories = ["복약관리", "진료관리", "진료일정"];
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [events, setEvents] = useState({});
+  const [loading, setLoading] = useState(false);
   
   const handleCategoryChange = (category) => {
   setSelectedCategory(prev => (prev === category ? null : category));
@@ -59,23 +53,53 @@ function CalendarPage() {
     setSelectedDate(null);
   };
 
+  const loadMonthlyEvents = async () => {
+    try {
+      setLoading(true);
+      
+      const allEvents = await getAllCalendarEvents();
+      console.log('전체 이벤트 조회:', allEvents);
+      
+      const eventsByDate = {};
+      
+      if (Array.isArray(allEvents)) {
+        allEvents.forEach(event => {
+          const dateKey = event.startDate ? event.startDate.split('T')[0] : null;
+          
+          if (dateKey) {
+            if (!eventsByDate[dateKey]) {
+              eventsByDate[dateKey] = [];
+            }
+            eventsByDate[dateKey].push(event.title.slice(0, 4));
+          }
+        });
+      }
+      
+      setEvents(eventsByDate);
+      
+    } catch (error) {
+      console.error('월별 이벤트 로드 실패:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDateClick = async (day) => {
   if (!day) return;
 
   const clickedDate = new Date(year, month, day);
   setSelectedDate(clickedDate);
 
-  try {
-    const dateStr = clickedDate.toISOString(); // ISO 문자열
-    const eventData = await getCalendarEventsByDate(dateStr);
-
-    // 예: { '2025-05-07': ['진료', '약 복용'] } 형태로 저장
-    const key = dateStr.slice(0, 10);
-    setEvents(prev => ({ ...prev, [key]: eventData.events || [] }));
-  } catch (error) {
-    console.error('일정 조회 실패:', error);
-  }
 };
+  const handleCloseModal = () => {
+    setSelectedDate(null);
+    setSelectedCategory(null);
+    loadMonthlyEvents();
+  };
+
+  useEffect(() => {
+    loadMonthlyEvents();
+  }, [year, month]);
 
   return (
     <CalendarContainer>
@@ -85,6 +109,11 @@ function CalendarPage() {
           캘린더에 이것저것 기록하며, 일정 관리를 해보세요.<br />
           날짜를 터치하면 일정을 확인하거나 기록할 수 있습니다.
         </Content>
+        {loading && (
+          <Content style={{ color: '#42CCC5', marginTop: '8px' }}>
+            이벤트를 불러오는 중...
+          </Content>
+        )}
       </Card>
 
       <Card>
@@ -107,8 +136,7 @@ function CalendarPage() {
       </Card>
 
       {selectedDate && (
-        <SelectedDateModal selectedDate={selectedDate} onClose={() => setSelectedDate(null)} selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} categories={categories}
-  />
+        <SelectedDateModal selectedDate={selectedDate} onClose={handleCloseModal}selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} categories={categories}/>
       )}
     </CalendarContainer>
   );
