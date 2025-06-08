@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { StyledPostButton, IconImage } from "./style";
+import { StyledPostButton, IconImage } from "./Style";
 import PostIcon from "../../assets/icons/post.png"; // 실제 경로로 수정
 
 const PostButton = () => {
