@@ -24,9 +24,27 @@ const useDeleteFamily = () => {
       navigate('/family'); 
     },
 
-    onError: (_err, _vars, context) => {
-      if (context?.previousFamily) {
-        queryClient.setQueryData(['getFamily'], context.previousFamily);
+    onError: (error) => {
+      const code = error.response?.data?.code;
+
+      switch (code) {
+        case 'FAM-001':
+          alert('이미 가족에 속해있는 유저입니다.');
+          break;
+        case 'FAM-002':
+          alert('존재하지 않는 가족입니다.');
+          break;
+        case 'FAM-003':
+          alert('잘못된 가족 코드입니다.');
+          break;
+        case 'FAM-004':
+          alert('가족의 장이 아닙니다.');
+          break;
+        case 'FAM-005':
+          alert('가족의 장은 탈퇴할 수 없습니다.');
+          break;
+        default:
+          alert('알 수 없는 오류가 발생했습니다.');
       }
     },
 

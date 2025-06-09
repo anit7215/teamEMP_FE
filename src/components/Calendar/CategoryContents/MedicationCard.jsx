@@ -186,8 +186,10 @@ const MedicationCard = ({ selectedDate, onClose, editMode = false, editData = nu
       </div>
 
       <div style={{ marginBottom: '16px' }}>
+        <S.Text>
         <S.Title>캘린더 표시 우선순위</S.Title>
         <S.AddText>숫자가 낮을수록 높은 우선순위</S.AddText>
+        </S.Text>
         <Input 
           type="number"
           value={priority}
@@ -223,7 +225,7 @@ const MedicationCard = ({ selectedDate, onClose, editMode = false, editData = nu
       <div style={{marginTop: '8px', marginBottom: '8px'}}>
      <Category labels={secret} selectedTab={selectedSecret}  onTabClick={handleSecretChange}buttonStyle="gradient" />
       </div>
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', gap: '8px', flexDirection: editMode ? 'row' : 'column' }}>
         <Button 
           text={loading ? (editMode ? "수정 중..." : "등록 중...") : (editMode ? "복약일정 수정하기" : "복약일정 및 정보 기록하기")}
           onClick={handleSubmit}
