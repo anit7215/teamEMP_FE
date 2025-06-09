@@ -194,8 +194,10 @@ const TreatmentCard = ({ selectedDate, onClose, editMode = false, editData = nul
       </div>
 
       <div style={{ marginBottom: '16px' }}>
+        <S.Text>
         <S.Title>캘린더 표시 우선순위</S.Title>
         <S.AddText>숫자가 낮을수록 높은 우선순위</S.AddText>
+        </S.Text>
         <Input 
           type="number"
           value={priority}
@@ -207,15 +209,16 @@ const TreatmentCard = ({ selectedDate, onClose, editMode = false, editData = nul
         />
       </div>
       
+      <div style={{ marginBottom: '16px'}}>
       <S.Title>진료결과 이미지 업로드하기</S.Title>
-      <div style={{ margin: '8px 0'}}>
+      <div style={{ display: 'flex', gap: '8px', flexDirection: editMode ? 'row' : 'column' }} marginTop="8px">
         <ImageUpload 
           onImageUpload={handleImageUpload}
           onImageDelete={handleImageDelete}
           uploadedImages={uploadedImages}
         />
       </div>
-      
+      </div>
       <S.Title>메모</S.Title>
       <div style={{ marginBottom: '16px'}}>
         <S.InputField 
@@ -235,7 +238,7 @@ const TreatmentCard = ({ selectedDate, onClose, editMode = false, editData = nul
         />
       </div>
 
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', gap: '8px', flexDirection: editMode ? 'row' : 'column' }}>
         <Button 
           text={loading ? (editMode ? "수정 중..." : "등록 중...") : (editMode ? "진료결과 수정하기" : "진료결과 기록완료")}
           onClick={handleSubmit}
