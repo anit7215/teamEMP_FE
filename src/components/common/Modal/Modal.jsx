@@ -5,15 +5,16 @@ const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.3);
   z-index: 999;
+  overflow-y: auto;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 130px;
   overflow-y: auto;
+  padding: 100px 16px;
 `;
 
 const ModalContainer = styled.div`
@@ -21,11 +22,11 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  overflow-y: auto;
   width: calc(100% - 50px);
-  padding: 0 25px;
-  margin-bottom:130px;
-  border-radius: 20px;
+  max-height: 100vh;
+  overflow-y: auto;
+
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
 `;
 
 const Modal = ({ children, onClose }) => {
