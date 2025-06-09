@@ -130,10 +130,6 @@ const MyPage = () => {
                 <S.AddButton src={AddButton} onClick={handleAddKeyword}/>
                 <Button text="키워드 등록하기" onClick={handleSubmit}/>
             </Card>
-            
-            <Card>
-                <S.Title>내가 쓴 글 모아보기</S.Title>
-            </Card>
             <Card onClick={logout}>
                 <S.Title>로그아웃</S.Title>
             </Card>
