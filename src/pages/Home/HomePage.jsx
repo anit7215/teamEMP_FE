@@ -8,6 +8,7 @@ import Input from '../../components/common/Input/Input';
 import defaultImage from '../../assets/icons/defaultProfile.svg';
 import useGetMyInfo from '../../hooks/queries/useGetMyInfo';
 import useAddHealthValue from '../../hooks/mutations/useAddHealthValue';
+import GraphIcon from '../../assets/icons/Graph.svg';
 
 import * as S from './Style';
 
@@ -129,8 +130,30 @@ const HomePage = () => {
                 <Category labels={categories} selectedTab={selectedCategory} onTabClick={handleCategoryChange} buttonStyle="default" />
             </Card>
             <Card>
-                <S.Title>{title}</S.Title>
-                <S.Content>{content}</S.Content>
+                 <S.TitleWrapper>
+                    <div>
+                    <S.Title>{title}</S.Title>
+                    <S.Content>{content}</S.Content>
+                    </div>
+                    <S.GraphButton
+                    src={GraphIcon}
+                    alt="통계 바로가기"
+                    onClick={() => {
+                        const typeMap = {
+                        "혈당": "BLOOD_SUGAR",
+                        "혈압": "BLOOD_PRESSURE",
+                        "체중": "WEIGHT",
+                        "수면": "SLEEP_TIME",
+                        };
+                        const type = typeMap[selectedCategory];
+                        if (type) {
+                        navigate(`/statistics?type=${type}`);
+                        } else {
+                        alert("잘못된 카테고리입니다.");
+                        }
+                    }}
+                    />
+                </S.TitleWrapper>
                 <S.Title>{subtitle}</S.Title>
                 <S.InputWrapper>
                     <Input placeholder={inputPlaceholder} value={inputValue}

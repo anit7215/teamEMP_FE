@@ -2,14 +2,24 @@ import React, { useState } from 'react';
 import Card from '../../components/common/Card/Card';
 import Button from '../../components/common/Button/Button';
 import * as S from './PostStyle';
+import { createPost } from '../../apis/community';
 
 function CommunityPostPage() {
   const [content, setContent] = useState('');
 
-  const handleSubmit = () => {
-    if (!content.trim()) return;
+  const handleSubmit = async () => {
+  if (!content.trim()) return;
+
+  try {
+    await createPost({ content });
     alert('게시물이 작성되었습니다!');
-  };
+    setContent(''); 
+  } catch (error) {
+    console.error(error);
+    alert('게시물 작성에 실패했습니다.');
+  }
+};
+
 
   const isActive = content.trim().length > 0;
 
