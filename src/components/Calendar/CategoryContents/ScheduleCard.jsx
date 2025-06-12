@@ -198,8 +198,10 @@ const ScheduleCard = ({ selectedDate, onClose, editMode = false, editData = null
       </div>
 
       <div style={{ marginBottom: '16px' }}>
+        <S.Text>
         <S.Title>캘린더 표시 우선순위</S.Title>
         <S.AddText>숫자가 낮을수록 높은 우선순위</S.AddText>
+        </S.Text>
         <Input 
           type="number"
           value={priority}
@@ -230,7 +232,7 @@ const ScheduleCard = ({ selectedDate, onClose, editMode = false, editData = null
         />
       </div>
 
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', gap: '8px', flexDirection: editMode ? 'row' : 'column' }}>
         <Button text={loading ? (editMode ? "수정 중..." : "등록 중...") : (editMode ? "진료일정 수정하기" : "진료일정 기록완료")}
           onClick={handleSubmit}
           disabled={loading || !title.trim() || !location.trim()}

@@ -6,7 +6,6 @@ export const fetchCommunityPosts = async () => {
   const response = await axiosInstance.get('/community');
   return response.data;
 };
-
 //게시글 등록
 export const postCommunityPost = async (postData, accessToken) => {
   const response = await axiosInstance.post('/posts', postData, {

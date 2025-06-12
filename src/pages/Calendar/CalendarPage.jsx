@@ -1,30 +1,11 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import Card from '../../components/common/Card/Card';
 import CalendarHeader from '../../components/Calendar/Header';
 import CalendarGrid from '../../components/Calendar/Calendar';
 import { getMonthData } from '../../utils/calendar';
 import SelectedDateModal from '../../components/Calendar/SelectedDateModal/SelectedDateModal';
 import { getCalendarEventsByDate, getAllCalendarEvents } from '../../apis/calendar';
-
-const CalendarContainer = styled.div`
-  margin-bottom: 100px;
-`;
-
-const Title = styled.h2`
-  color: #474A52;
-  font-family: Pretendard-SemiBold;
-  font-size: 16px;
-`;
-
-const Content = styled.p`
-  margin-top: 4px;
-  color: var(--greyscale-600, #686B73);
-  font-family: Pretendard-Regular;
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 14px;
-`;
+import * as S from './Style';
 
 function CalendarPage() {
   const today = new Date();
@@ -102,17 +83,17 @@ function CalendarPage() {
   }, [year, month]);
 
   return (
-    <CalendarContainer>
+    <S.CalendarContainer>
       <Card>
-        <Title>나의 캘린더</Title>
-        <Content>
+        <S.Title>나의 캘린더</S.Title>
+        <S.Content>
           캘린더에 이것저것 기록하며, 일정 관리를 해보세요.<br />
           날짜를 터치하면 일정을 확인하거나 기록할 수 있습니다.
-        </Content>
+        </S.Content>
         {loading && (
-          <Content style={{ color: '#42CCC5', marginTop: '8px' }}>
+          <S.Content>
             이벤트를 불러오는 중...
-          </Content>
+          </S.Content>
         )}
       </Card>
 
@@ -138,7 +119,7 @@ function CalendarPage() {
       {selectedDate && (
         <SelectedDateModal selectedDate={selectedDate} onClose={handleCloseModal}selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} categories={categories}/>
       )}
-    </CalendarContainer>
+    </S.CalendarContainer>
   );
 }
 

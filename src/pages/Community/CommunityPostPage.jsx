@@ -5,6 +5,7 @@ import Button from '../../components/common/Button/Button';
 import * as S from './PostStyle';
 import { postCommunityPost } from '../../apis/community';
 
+
 function CommunityPostPage() {
   const navigate = useNavigate();
   const [content, setContent] = useState('');
