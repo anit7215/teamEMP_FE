@@ -9,13 +9,18 @@ const JoinFamilyModal = ({ isOpen, onClose, onJoin, joinCode, setJoinCode, isJoi
 
   if (!isOpen) return null;
 
-  const handleJoinClick = () => {
-    if (joinCode.trim() === '') {
-      alert('가족 코드를 입력해주세요.');
-      return;
-    }
-     onJoin({ code: joinCode });
-  };
+ const handleJoinClick = async () => {
+  if (joinCode.trim() === '') {
+    alert('가족 코드를 입력해주세요.');
+    return;
+  }
+  
+  try {
+    await onJoin({ code: joinCode });
+    onClose(); 
+  } catch (error) {
+  }
+};
 
   return (
     <Modal onClose={onClose}>
