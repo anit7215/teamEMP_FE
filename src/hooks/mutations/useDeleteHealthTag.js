@@ -4,35 +4,44 @@ import { deleteHealthTag } from '../../apis/user';
 const useDeleteHealthTag = (options = {}) => {
   const queryClient = useQueryClient();
 
- return useMutation(deleteHealthTag, {
-  onMutate: async (deletedTagId) => {
-    await queryClient.cancelQueries(['getHealthTag']);
-    const previousHealthTag = queryClient.getQueryData(['getHealthTag']);
+  return useMutation({
+    mutationFn: deleteHealthTag,
+    
+    onMutate: async (deletedTagId) => {
+      await queryClient.cancelQueries({ queryKey: ['healthTag'] });
+      
+      const previousData = queryClient.getQueryData(['healthTag']);
+      
+      queryClient.setQueryData(['healthTag'], (old) => {
+        if (!old?.data || !Array.isArray(old.data)) return old;
+        
+        return {
+          ...old,
+          data: old.data.filter(tag => tag.id !== deletedTagId),
+        };
+      });
 
-    queryClient.setQueryData(['getHealthTag'], (old) => {
-      if (!old) return old;
-      return old.filter(tag => tag.id !== deletedTagId);
-    });
+      return { previousData };
+    },
 
-    return { previousHealthTag };
-  },
-  onError: (error, variables, context) => {
-    if (context?.previousHealthTag) {
-      queryClient.setQueryData(['getHealthTag'], context.previousHealthTag);
-    }
-  },
-  onSuccess: (data, variables) => {
-    queryClient.setQueryData(['getHealthTag'], (old) => {
-      if (!old) return old;
-      return old.filter(tag => tag.id !== variables); 
-    });
+    onError: (error, variables, context) => {
+      console.error('Delete error:', error);
+      if (context?.previousData) {
+        queryClient.setQueryData(['healthTag'], context.previousData);
+      }
+    },
 
-    if (options.onSuccess) options.onSuccess(data, variables);
-  },
-  onSettled: () => {
-    queryClient.invalidateQueries(['getHealthTag']);
-  }
-});
+    onSuccess: (data, variables) => {
+      console.log('Delete success:', data);
+      if (options.onSuccess) {
+        options.onSuccess(data, variables);
+      }
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['healthTag'] });
+    },
+  });
 };
 
 export default useDeleteHealthTag;

@@ -117,3 +117,17 @@ export const TagContainer = styled.div`
   white-space: nowrap;
   
 `;
+
+export const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const GraphButton = styled.img`
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  border-radius: 100px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+`;

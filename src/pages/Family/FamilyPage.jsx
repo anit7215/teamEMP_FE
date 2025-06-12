@@ -50,6 +50,7 @@ const FamilyPage = () => {
           name: member.name,
           gender: genderText,
           tags: [...healthTags, `${member.age}세`],
+          age: member.age,
           healthTag: healthTags, 
         };
       });
@@ -212,12 +213,10 @@ const FamilyPage = () => {
                     ) : (
                       <S.GenderIcon src={MaleIcon} />
                     )}
-                    {member.healthTag.map((tag, i) => (
+                    {member.healthTag.slice(0, 2).map((tag, i) => (
                       <Tag key={i} text={tag} />
                     ))}
-                    {member.tags.map((tag, i) => (
-                      <Tag key={i} text={tag} disabled={tag.includes('세')} />
-                    ))}
+                    <Tag text={`${member.age}세`} disabled />
                   </S.TagContainer>
                 </S.InfoContainer>
               </S.LeftGroup>
